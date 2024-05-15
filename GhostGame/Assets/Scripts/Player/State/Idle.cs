@@ -2,45 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace personal
+public class Idle :IState
 {
-    public class Idle :IState
+    private PlayerController player;
+    Rigidbody rb;
+
+    public Idle(PlayerController player)
     {
-        private PlayerController player;
-        Rigidbody rb;
+        this.player = player;
+    }
 
-        public Idle(PlayerController player)
+    public void Enter()
+    {
+        rb = player.Rb;
+    }
+
+    public void Update()
+    {
+
+        if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
         {
-            this.player = player;
+            player.Change(player.move);
         }
-
-        public void Enter()
+        if (Input.GetKeyDown("joystick button 2"))
         {
-            rb = player.Rb;
+            player.Change(player.lightAttack);
         }
-
-        public void Update()
+        if(Input.GetKeyDown("joystick button 4"))
         {
-
-            if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
-            {
-                player.Change(player.move);
-            }
-            if (Input.GetKeyDown("joystick button 2"))
-            {
-                player.Change(player.lightAttack);
-            }
-            if(Input.GetKeyDown("joystick button 4"))
-            {
-                player.Change(player.stanAttack);
-            }
-
-        }
-
-        public void Exit()
-        {
-
+            player.Change(player.stanAttack);
         }
 
     }
+
+    public void Exit()
+    {
+
+    }
+
 }

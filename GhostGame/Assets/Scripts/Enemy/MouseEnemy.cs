@@ -51,7 +51,6 @@ public class MouseEnemy : EnemyBase
 
                 //‹——£æ“¾
                 float distance = vec.magnitude;
-                Debug.Log(distance);
 
                 //³‹K‰»ƒxƒNƒgƒ‹
                 Vector3 dir = vec.normalized;
