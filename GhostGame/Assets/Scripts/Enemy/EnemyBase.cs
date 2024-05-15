@@ -32,7 +32,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     int attackInterval;
 
-    public PlayerTest player;
+    public PlayerController player;
 
     protected EnemyState state;
     protected Transform targetTransform;
@@ -44,7 +44,7 @@ public class EnemyBase : MonoBehaviour
     {
         hp = maxHp;
         stanPoint = maxStanPoint;
-        player = GameObject.FindWithTag("Player").GetComponent<PlayerTest>();
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         if (player != null)
             Debug.Log("ai");
     }
@@ -60,7 +60,7 @@ public class EnemyBase : MonoBehaviour
         hp -= damage;
         if(hp <= 0)
         {
-
+            gameObject.SetActive(false);
         }
     }
 
