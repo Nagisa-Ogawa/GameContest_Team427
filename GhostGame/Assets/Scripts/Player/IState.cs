@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IState 
+namespace personal
 {
-    void Enter();
+    public interface IState 
+    {
+        void Enter();
 
 
 
-    void Update();
+        void Update();
 
 
-    void Exit();
+        void Exit();
    
+    }
+
 }
