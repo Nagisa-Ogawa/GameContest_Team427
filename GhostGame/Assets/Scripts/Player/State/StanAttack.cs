@@ -6,13 +6,13 @@ using UnityEngine;
 public class StanAttack : IState
 {
     private PlayerController player;
-    int stanAttackDamage = 3;      // スタン攻撃のダメージ数
     float stanAttackCD = 3.0f;     // スタン攻撃のクールダウン
     float stanAttackRadius = 3.0f; // スタン攻撃の敵を捕捉する球体の半径
     float stanAttackOffset = 3.0f; // 接近してスタン攻撃する際の敵との距離オフセット
     float moveSpeed = 7.0f; // 敵に接近する際の速度
     float lastAttackTime = 0.0f;
     GameObject target = null;
+    float hitTime = 0.1f;
 
     Vector3 startAngle = Vector3.zero;
     float rotatePower = 1.0f;
@@ -31,19 +31,8 @@ public class StanAttack : IState
             player.Change(player.idle);
             return;
         }
-        // クールダウンなら攻撃をやめる
-        // 周囲に攻撃が届く敵がいるかチェック
-        if (!SearchEnemy())
-        {
-            // いないなら攻撃をやめる
-            player.Change(player.idle);
-            return;
-        }
-        else
-        {
-            // 攻撃コルーチン開始
-            player.StartCoroutine(Attack());
-        }
+        // 攻撃コルーチン開始
+        player.StartCoroutine(StanAttackCoroutine());
     }
 
     public void Update()
@@ -100,6 +89,24 @@ public class StanAttack : IState
         // 攻撃を終了
         player.Change(player.idle);
         yield return null;
+    }
+
+    IEnumerator StanAttackCoroutine()
+    {
+        // 攻撃準備（1秒待機）
+        yield return new WaitForSeconds(1.0f);
+        // 範囲攻撃エフェクトを作成
+
+        // 範囲スタン攻撃用コリジョンを表示
+        player.StanAttackAreaObj.GetComponent<SphereCollider>().enabled = true;
+        // 少し待機
+        yield return new WaitForSeconds(hitTime);
+        // 範囲スタン攻撃用コリジョンを非表示
+        player.StanAttackAreaObj.GetComponent<SphereCollider>().enabled = false;
+        // 現在時刻を取得
+        lastAttackTime = Time.time;
+        // 攻撃を終了
+        player.Change(player.idle);
     }
 
     IEnumerator MoveToEnemy()

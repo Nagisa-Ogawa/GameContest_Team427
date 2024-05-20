@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // 移動速度
     [SerializeField]
     private float speed = 3.0f; 
     public float Speed
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         private set {speed = value; }
     }
 
+    // 攻撃ヒット時のエフェクト
     [SerializeField]
     private GameObject hitEffectObj = null;
     public GameObject HitEffectObj
@@ -50,6 +52,7 @@ public class PlayerController : MonoBehaviour
         private set { hitEffectObj = value; }
     }
 
+    // スタン攻撃ヒット時のエフェクト
     [SerializeField]
     private GameObject stanHitEffectObj = null;
     public GameObject StanHitEffectObj
@@ -58,7 +61,7 @@ public class PlayerController : MonoBehaviour
         private set { stanHitEffectObj = value; }
     }
 
-
+    // プレイヤーの仮攻撃アニメーション用オブジェクト
     [SerializeField]
     private GameObject playerArmObj = null;
     public GameObject PlayerArmObj
@@ -67,7 +70,22 @@ public class PlayerController : MonoBehaviour
         private set { playerArmObj = value; }
     }
 
+    // スタン攻撃時の範囲用オブジェクト
+    [SerializeField]
+    private GameObject stanAttackAreaObj = null;
+    public GameObject StanAttackAreaObj
+    {
+        get { return stanAttackAreaObj; }
+        private set { stanAttackAreaObj = value; }
+    }
 
+    // プレイヤーインプット
+    PlayerInput playerInput = null;
+    public PlayerInput PlayerInput
+    {
+        get { return playerInput; }
+        private set { playerInput = value; }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -75,6 +93,8 @@ public class PlayerController : MonoBehaviour
         move = new Move(this);
         lightAttack = new LightAttack(this);
         stanAttack= new StanAttack(this);
+
+        playerInput=GetComponent<PlayerInput>();
 
         Change(idle);
 

@@ -6,7 +6,7 @@ using UnityEngine;
 public class LightAttack : IState
 {
     private PlayerController player;
-    int lightAttackDamage = 3;      // 弱攻撃のダメージ数
+    int lightAttackDamage = 5;      // 弱攻撃のダメージ数
     float lightAttackCD = 1.0f;     // 弱攻撃のクールダウン
     float lightAttackRadius = 3.0f; // 弱攻撃の敵を捕捉する球体の半径
     float lightAttackOffset = 3.0f; // 接近して弱攻撃する際の敵との距離オフセット
@@ -87,6 +87,8 @@ public class LightAttack : IState
         yield return coroutine;
         coroutine = player.StartCoroutine(MoveArm());
         yield return coroutine;
+        if (target == null)
+            yield break;
         // 攻撃エフェクトを作成
         GameObject hitEffectObj = GameObject.Instantiate(player.HitEffectObj,target.transform.position,Quaternion.identity);
         Camera camera=Camera.main;
@@ -94,7 +96,7 @@ public class LightAttack : IState
         ParticleSystem hitEffect=hitEffectObj.GetComponent<ParticleSystem>();
         hitEffect.Play();
         // ダメージを与える
-        target.GetComponentInParent<EnemyBase>().TakeDamage(5);
+        target.GetComponentInParent<EnemyBase>().TakeDamage(lightAttackDamage);
         // 現在時刻を取得
         lastAttackTime = Time.time;
         // 攻撃を終了
