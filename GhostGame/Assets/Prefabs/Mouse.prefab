@@ -256,7 +256,7 @@ MonoBehaviour:
   player: {fileID: 0}
   attackCollider: {fileID: 923039372756691483}
   stanAttackCollider: {fileID: 144540385328836664}
-  attackRange: 2
+  attackRange: 3
 --- !u!1 &7866449682976626777
 GameObject:
   m_ObjectHideFlags: 0

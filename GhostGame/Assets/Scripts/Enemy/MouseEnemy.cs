@@ -82,12 +82,10 @@ public class MouseEnemy : EnemyBase
                 if (temp == 0)
                 {
                     Attack();
-                    Debug.Log("attack");
                 }
                 else
                 {
                     StanAttack();
-                    Debug.Log("stanattack");
                 }
 
                 isAttack = true;
