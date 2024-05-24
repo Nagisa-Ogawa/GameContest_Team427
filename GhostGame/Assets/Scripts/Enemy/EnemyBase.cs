@@ -10,7 +10,8 @@ public class EnemyBase : MonoBehaviour
         Chase,
         Attack,
         Freeze,
-        Sleep
+        Sleep,
+        Possession
     }
 
 
@@ -23,8 +24,8 @@ public class EnemyBase : MonoBehaviour
 
     bool isStan;
 
-    int damage;
-    int stanDamage;
+    public int damage;
+    public int stanDamage;
 
     [SerializeField]
     protected float moveSpeed;
@@ -37,6 +38,8 @@ public class EnemyBase : MonoBehaviour
     protected EnemyState state;
     protected Transform targetTransform;
 
+    //攻撃後などの硬直時間
+    protected float freezeTime;
 
 
     // Start is called before the first frame update
@@ -45,14 +48,25 @@ public class EnemyBase : MonoBehaviour
         hp = maxHp;
         stanPoint = maxStanPoint;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        if (player != null)
-            Debug.Log("ai");
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+        //全エネミー共通？
+        if(state == EnemyState.Freeze)
+        {
+            //硬直時間減少
+            freezeTime -= Time.deltaTime;
+
+            //硬直時間が終了したら
+            if(freezeTime <= 0.0f)
+            {
+                //idleに戻す
+                freezeTime = 0.0f;
+                SetState(EnemyState.Idle);
+            }
+        }
     }
 
     public void TakeDamage(int damage)

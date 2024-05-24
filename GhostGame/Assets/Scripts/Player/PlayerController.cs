@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public Move move;
     public LightAttack lightAttack;
     public StanAttack stanAttack;
+    public Possession possession;
 
 
     [SerializeField]
@@ -24,6 +25,11 @@ public class PlayerController : MonoBehaviour
     int stanPoint;
 
     bool isStan;
+
+    //今憑依しているエネミー
+    private GameObject possessionEnemy = null;
+    //憑依対象になっているエネミー
+    public GameObject possessionTargetEnemy = null;
 
     [SerializeField]
     private Rigidbody rb = null;
@@ -75,6 +81,7 @@ public class PlayerController : MonoBehaviour
         move = new Move(this);
         lightAttack = new LightAttack(this);
         stanAttack= new StanAttack(this);
+        possession = new Possession(this);
 
         Change(idle);
 
@@ -100,6 +107,18 @@ public class PlayerController : MonoBehaviour
         if(currentState != null)
         {
             currentState.Update();
+        }
+
+        if(Input.GetKeyDown("k"))
+        {
+            if(possessionTargetEnemy != null)
+            {
+                possessionEnemy = possessionTargetEnemy;
+                possessionEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Possession);
+                GetComponent<CapsuleCollider>().isTrigger = true;
+                Change(possession);
+            }
+            
         }
     }
 
@@ -127,5 +146,18 @@ public class PlayerController : MonoBehaviour
             // スタン時の処理
             stanPoint = 0;
         }
+    }
+
+    //今憑依しているエネミーを取得
+    public GameObject GetPossessionEnemy()
+    {
+        return possessionEnemy;
+    }
+
+    //憑依解除時に使用
+    //憑依中エネミー変数をnullにする
+    public void ResetPossessionEnemy()
+    {
+        possessionEnemy = null;
     }
 }

@@ -16,7 +16,7 @@ public class MouseEnemy : EnemyBase
     BoxCollider stanAttackCollider;
 
     [SerializeField]
-    float attackRange = 1.0f;
+    float attackRange = 3.0f;
 
     //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
     bool isAttack = false;
@@ -38,6 +38,8 @@ public class MouseEnemy : EnemyBase
     // Update is called once per frame
     protected override void Update()
     {
+        base.Update();
+
         if(state == EnemyState.Chase)
         {
             if(targetTransform == null)
@@ -92,6 +94,10 @@ public class MouseEnemy : EnemyBase
             }
             
         }
+        else if(state == EnemyState.Possession)
+        {
+
+        }
         
 
     }
@@ -116,14 +122,13 @@ public class MouseEnemy : EnemyBase
 
         EnableAttackCollider();
 
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(0.2f);
 
         DisableAttackCollider();
 
-        yield return new WaitForSeconds(1.0f);
+        SetState(EnemyState.Freeze);
 
-        SetState(EnemyState.Chase, targetTransform);
-
+        freezeTime = 1.0f;
         isAttack = false;
     }
 
@@ -133,14 +138,12 @@ public class MouseEnemy : EnemyBase
 
         EnableStanAttackCollider();
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.2f);
 
         DisableStanAttackCollider();
 
-        yield return new WaitForSeconds(1.0f);
-
-        SetState(EnemyState.Chase, targetTransform);
-
+        SetState(EnemyState.Freeze);
+        freezeTime = 1.5f;
         isAttack = false;
 
     }

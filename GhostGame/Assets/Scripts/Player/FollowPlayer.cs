@@ -17,6 +17,14 @@ public class FollowPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = followPlayer.transform.position + offset;
+        if(followPlayer.GetComponent<PlayerController>().GetPossessionEnemy() == null)
+        {
+            transform.position = followPlayer.transform.position + offset;
+        }
+        else
+        {
+            transform.position = followPlayer.GetComponent<PlayerController>().GetPossessionEnemy().transform.position + offset;
+        }
+        
     }
 }

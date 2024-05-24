@@ -159,7 +159,7 @@ BoxCollider:
   m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &4826379711932077692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,6 +251,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 10
   maxStanPoint: 5
+  damage: 8
+  stanDamage: 5
   moveSpeed: 2
   attackInterval: 5
   player: {fileID: 0}
@@ -310,7 +312,7 @@ BoxCollider:
   m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!114 &8322461084136081475
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +406,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 65a1436403df97947b8e0a9a019e0b06, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 65a1436403df97947b8e0a9a019e0b06, type: 3}
       propertyPath: m_LocalPosition.z
