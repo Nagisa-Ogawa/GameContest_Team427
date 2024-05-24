@@ -41,12 +41,23 @@ public class SphereSensor : MonoBehaviour
 
     private void OnTriggerStay(Collider target)
     {
+
         if(target.gameObject.tag == "Player")
         {
-            //追跡状態じゃなければ追跡状態に変更
-            if (enemy.GetState() == EnemyBase.EnemyState.Idle)
+            //攻撃状態または硬直状態じゃなければ更新
+            if (enemy.GetState() != EnemyBase.EnemyState.Freeze && enemy.GetState() != EnemyBase.EnemyState.Attack)
             {
-                enemy.SetState(EnemyBase.EnemyState.Chase, target.transform);
+                //プレイヤーが憑依しているエネミーがいるなら
+                if(target.GetComponent<PlayerController>().GetPossessionEnemy() != null)
+                {
+                    //PossessionEnemyのTransformをターゲットに入れる
+                    enemy.SetState(EnemyBase.EnemyState.Chase, target.GetComponent<PlayerController>().GetPossessionEnemy().transform);
+                }
+                else
+                {
+                    //いないならPlayerのTransformをターゲットに入れる
+                    enemy.SetState(EnemyBase.EnemyState.Chase, target.transform);
+                }
             }
 
             ResetOutSensorTime();
