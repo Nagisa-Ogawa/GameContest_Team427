@@ -5,7 +5,11 @@ using UnityEngine;
 public class Idle :IState
 {
     private PlayerController player;
-    Rigidbody rb;
+    Rigidbody rb = null;
+
+    Vector2 moveInput = Vector2.zero;
+    bool isLightAttack = false;
+    bool isStanAttack = false;
 
     public Idle(PlayerController player)
     {
@@ -19,16 +23,18 @@ public class Idle :IState
 
     public void Update()
     {
-
-        if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
+        moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
+        if (moveInput.x != 0.0f || moveInput.y != 0.0f)
         {
             player.Change(player.move);
         }
-        if (Input.GetKeyDown("joystick button 2"))
+        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].IsPressed();
+        if (isLightAttack)
         {
             player.Change(player.lightAttack);
         }
-        if(Input.GetKeyDown("joystick button 4"))
+        isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].IsPressed();
+        if (isStanAttack)
         {
             player.Change(player.stanAttack);
         }

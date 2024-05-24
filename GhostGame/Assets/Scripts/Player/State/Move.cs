@@ -9,6 +9,10 @@ public class Move : IState
     private Camera camera;
     public Vector3 velocity;
 
+    Vector2 moveInput = Vector2.zero;
+    bool isLightAttack = false;
+    bool isStanAttack = false;
+
     public Move(PlayerController player)
     {
         this.player = player;
@@ -23,9 +27,10 @@ public class Move : IState
     {
         bool ISmove = false;
         velocity = new Vector3(0, 0, 0);
+        moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
         // カメラから見た左右と前後の入力値を受け取る
-        velocity += Input.GetAxis("Horizontal") * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
-        velocity += Input.GetAxis("Vertical") * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
+        velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
+        velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
         velocity = velocity.normalized * player.Speed;
         if(velocity!=Vector3.zero)
         {
@@ -37,11 +42,13 @@ public class Move : IState
             
         player.Rb.velocity = velocity;
 
-        if (Input.GetKeyDown("joystick button 2"))
+        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].IsPressed();
+        if (isLightAttack)
         {
             player.Change(player.lightAttack);
         }
-        if (Input.GetKeyDown("joystick button 4"))
+        isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].IsPressed();
+        if (isStanAttack)
         {
             player.Change(player.stanAttack);
         }
