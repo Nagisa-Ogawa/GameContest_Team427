@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
             currentState.Update();
         }
 
-        if(Input.GetKeyDown("k"))
+        if(PlayerInput.currentActionMap["Possession"].IsPressed())
         {
             if(possessionTargetEnemy != null)
             {
