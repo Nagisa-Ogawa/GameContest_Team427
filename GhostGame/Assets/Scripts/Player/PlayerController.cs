@@ -8,8 +8,7 @@ public class PlayerController : MonoBehaviour
 
     public IState currentState { get; private set; }
 
-[SerializeField]
-        
+    [SerializeField]
     public Idle idle;
     public Move move;
     public LightAttack lightAttack;
@@ -24,6 +23,11 @@ public class PlayerController : MonoBehaviour
     int stanPoint;
 
     bool isStan;
+
+    public float possessionDistance = 10.0f;
+
+    [SerializeField]
+    private StanAllowUIManager stanAllowUIManager = null;
 
     [SerializeField]
     private Rigidbody rb = null;
@@ -79,6 +83,16 @@ public class PlayerController : MonoBehaviour
         private set { stanAttackAreaObj = value; }
     }
 
+    // スタン攻撃時の範囲用オブジェクト用モデル
+    [SerializeField]
+    private GameObject stanAttackAreaModelObj = null;
+    public GameObject StanAttackAreaModelObj
+    {
+        get { return stanAttackAreaModelObj; }
+        private set { stanAttackAreaModelObj = value; }
+    }
+
+
     // プレイヤーインプット
     PlayerInput playerInput = null;
     public PlayerInput PlayerInput
@@ -117,7 +131,16 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentState != null)
+        // 憑依先選択の入力処理
+        if (PlayerInput.currentActionMap["NextTarget"].WasPressedThisFrame())
+        {
+            stanAllowUIManager.NextListEnemy();
+        }
+        if(PlayerInput.currentActionMap["PrevTarget"].WasPressedThisFrame())
+        {
+            stanAllowUIManager.PrevListEnemy();
+        }
+        if (currentState != null)
         {
             currentState.Update();
         }
