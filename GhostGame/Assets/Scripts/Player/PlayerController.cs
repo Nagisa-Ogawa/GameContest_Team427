@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private GameObject possessionEnemy = null;
     //憑依対象になっているエネミー
     public GameObject possessionTargetEnemy = null;
+    // プレイヤーが憑依可能な距離
+    public float possessionDistance = 10.0f;
 
     [SerializeField]
     private Rigidbody rb = null;
@@ -85,6 +87,16 @@ public class PlayerController : MonoBehaviour
         private set { stanAttackAreaObj = value; }
     }
 
+    [SerializeField]
+    private GameObject stanAttackAreaModelObj = null;
+    public GameObject StanAttackAreaModelObj
+    {
+        get { return stanAttackAreaModelObj; }
+        private set { stanAttackAreaModelObj = value; }
+    }
+
+    private StanAllowUIManager stanAllowUIManager = null;
+
     // プレイヤーインプット
     PlayerInput playerInput = null;
     public PlayerInput PlayerInput
@@ -102,6 +114,7 @@ public class PlayerController : MonoBehaviour
         possession = new Possession(this);
 
         playerInput=GetComponent<PlayerInput>();
+        stanAllowUIManager=GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
 
         Change(idle);
 
@@ -128,8 +141,17 @@ public class PlayerController : MonoBehaviour
         {
             currentState.Update();
         }
+        // 憑依対象変更入力
+        if (playerInput.currentActionMap["NextTarget"].WasPressedThisFrame())
+        {
+            stanAllowUIManager.NextListEnemy();
+        }
+        if (playerInput.currentActionMap["PrevTarget"].WasPressedThisFrame())
+        {
+            stanAllowUIManager.PrevListEnemy();
+        }
 
-        if(PlayerInput.currentActionMap["Possession"].IsPressed())
+        if (PlayerInput.currentActionMap["Possession"].IsPressed())
         {
             if(possessionTargetEnemy != null)
             {
