@@ -10,7 +10,7 @@ public class SphereSensor : MonoBehaviour
 
     //プレイヤーが感知範囲外にいる時間
     //一定時間以上感知範囲外にいた場合、追跡状態をやめる
-    private float outSensorTime;
+    private float outSensorTime  = 0;
 
     [SerializeField]
     private float chaseEndTime = 5.0f;
