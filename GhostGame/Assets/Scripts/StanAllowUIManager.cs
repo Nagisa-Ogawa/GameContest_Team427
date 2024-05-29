@@ -88,9 +88,14 @@ public class StanAllowUIManager : MonoBehaviour
 
     public void DeleteEnemyList(GameObject enemy)
     {
-        // 削除する矢印UIが現在アクティブなら
-            // 違う矢印UIをアクティブにする
         StanAllowUI stanAllowUI = enemy.GetComponentInChildren<StanAllowUI>();
+        // 削除する矢印UIが現在アクティブなら
+        if (stanAllowUI == activeUI)
+        {
+            // 違う矢印UIをアクティブにする
+            CheckCanShowAllowUI();
+        }
+        HideAllowUI(stanAllowUI);
         stanAllowUIList.Remove(stanAllowUI);
     }
 

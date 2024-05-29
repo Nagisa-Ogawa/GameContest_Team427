@@ -126,10 +126,9 @@ public class MouseEnemy : EnemyBase
 
         DisableAttackCollider();
 
-        SetState(EnemyState.Freeze);
-
-        freezeTime = 1.0f;
         isAttack = false;
+
+        SetState(EnemyState.Idle);
     }
 
     private IEnumerator StanAttackCoroutine()
@@ -142,9 +141,9 @@ public class MouseEnemy : EnemyBase
 
         DisableStanAttackCollider();
 
-        SetState(EnemyState.Freeze);
-        freezeTime = 1.5f;
         isAttack = false;
+
+        SetState(EnemyState.Idle);
 
     }
 
