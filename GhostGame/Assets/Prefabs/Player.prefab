@@ -134,13 +134,9 @@ MonoBehaviour:
   maxStanPoint: 16
   possessionTargetEnemy: {fileID: 0}
   possessionDistance: 10
-  rb: {fileID: 8895809455835436161}
   speed: 5
   hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
   stanHitEffectObj: {fileID: 5081134170703874692, guid: cc35d024673beb1409095dae4fcc469e, type: 3}
-  playerArmObj: {fileID: 4418434934547899638}
-  stanAttackAreaObj: {fileID: 1320576841380536113}
-  stanAttackAreaModelObj: {fileID: 1774152031424826792}
 --- !u!1 &1320576841380536113
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +150,7 @@ GameObject:
   - component: {fileID: 4126384434423409043}
   m_Layer: 0
   m_Name: StanAttackArea
-  m_TagString: Untagged
+  m_TagString: PlayerStanArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -226,7 +222,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6984680084114885674
 Transform:
   m_ObjectHideFlags: 0
@@ -237,7 +233,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4818580237044263036}
@@ -303,7 +299,7 @@ GameObject:
   - component: {fileID: 8990868564916142652}
   m_Layer: 0
   m_Name: RootArm
-  m_TagString: Untagged
+  m_TagString: PlayerArm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

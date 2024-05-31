@@ -14,11 +14,11 @@ public class Idle :IState
     public Idle(PlayerController player)
     {
         this.player = player;
+        rb = player.GetComponent<Rigidbody>();
     }
 
     public void Enter()
     {
-        rb = player.Rb;
     }
 
     public void Update()

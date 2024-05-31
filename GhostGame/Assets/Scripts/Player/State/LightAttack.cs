@@ -6,6 +6,7 @@ using UnityEngine;
 public class LightAttack : IState
 {
     private PlayerController player;
+    private Rigidbody rb;
     int lightAttackDamage = 5;      // ãUŒ‚‚Ìƒ_ƒ[ƒW”
     float lightAttackCD = 1.0f;     // ãUŒ‚‚ÌƒN[ƒ‹ƒ_ƒEƒ“
     float lightAttackRadius = 3.0f; // ãUŒ‚‚Ì“G‚ğ•ß‘¨‚·‚é‹…‘Ì‚Ì”¼Œa
@@ -14,12 +15,16 @@ public class LightAttack : IState
     float lastAttackTime = 0.0f;
     GameObject target = null;
 
+    GameObject armObj = null;
+
     Vector3 startAngle = Vector3.zero;
     float rotatePower = 1.0f;
     float totalRotate = 0;
     public LightAttack(PlayerController player)
     {
         this.player = player;
+        rb=player.GetComponent<Rigidbody>();
+        armObj = GameObject.FindWithTag("PlayerArm");
     }
 
     public void Enter()
@@ -108,14 +113,14 @@ public class LightAttack : IState
     {
         Vector3 dir = target.transform.position - player.transform.position;
         dir.y = 0.0f;
-        player.Rb.velocity = dir.normalized * moveSpeed;
+        rb.velocity = dir.normalized * moveSpeed;
         player.transform.forward = dir.normalized;
         while (true)
         {
             float distance = (target.transform.position - player.transform.position).magnitude;
             if (distance <= lightAttackOffset)
             {
-                player.Rb.velocity = Vector3.zero;
+                rb.velocity = Vector3.zero;
                 yield break;
             }
             yield return null;
@@ -124,17 +129,17 @@ public class LightAttack : IState
 
     IEnumerator MoveArm()
     {
-        startAngle = player.PlayerArmObj.transform.localEulerAngles;
+        startAngle = armObj.transform.localEulerAngles;
         while (true)
         {
-            Vector3 angle = player.PlayerArmObj.transform.localEulerAngles;
+            Vector3 angle = armObj.transform.localEulerAngles;
             angle.x += rotatePower;
             angle.y -= rotatePower;
-            player.PlayerArmObj.transform.localEulerAngles = angle;
+            armObj.transform.localEulerAngles = angle;
             totalRotate += rotatePower;
             if (totalRotate > 120.0f)
             {
-                player.PlayerArmObj.transform.localEulerAngles = startAngle;
+                armObj.transform.localEulerAngles = startAngle;
                 totalRotate = 0.0f;
                 yield break;
             }
