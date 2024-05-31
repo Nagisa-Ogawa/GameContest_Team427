@@ -9,7 +9,20 @@ public class StanAllowUIManager : MonoBehaviour
     List<StanAllowUI> stanAllowUIList = new List<StanAllowUI>();
     int activeUIIndex = -1;     // 現在矢印UIを表示しているエネミーのリストの添え字
     StanAllowUI activeUI = null;
-
+    public StanAllowUI ActiveUI
+    {
+        get { return activeUI; }
+        set
+        {
+            activeUI = value;
+            if(value != null)
+            {
+                // UIに何かセットされた時プレイヤーの憑依対象も変更
+                GameObject enemy = value.transform.parent.gameObject;
+                playerObj.GetComponent<PlayerController>().possessionTargetEnemy = enemy;
+            }
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -22,10 +35,10 @@ public class StanAllowUIManager : MonoBehaviour
         if(activeUIIndex != -1)
         {
             // 常に現在矢印を表示している敵が憑依可能かチェック
-            if (!activeUI.CanShowUI)
+            if (!ActiveUI.CanShowUI)
             {
                 // 憑依不可能なら矢印を表示しない
-                HideAllowUI(activeUI);
+                HideAllowUI(ActiveUI);
                 // 他に憑依可能な敵がいるかチェック
                 CheckCanShowAllowUI();
             }
@@ -39,14 +52,14 @@ public class StanAllowUIManager : MonoBehaviour
 
     void ShowAllowUI(StanAllowUI ui,int index)
     {
-        activeUI = ui;
+        ActiveUI = ui;
         activeUIIndex = index;
         ui.ShowAllowUI();
     }
 
     void HideAllowUI(StanAllowUI ui) 
     {
-        activeUI = null;
+        ActiveUI = null;
         activeUIIndex = -1;
         ui.HideAllowUI();
     }
@@ -90,7 +103,7 @@ public class StanAllowUIManager : MonoBehaviour
     {
         StanAllowUI stanAllowUI = enemy.GetComponentInChildren<StanAllowUI>();
         // 削除する矢印UIが現在アクティブなら
-        if (stanAllowUI == activeUI)
+        if (stanAllowUI == ActiveUI)
         {
             // 違う矢印UIをアクティブにする
             CheckCanShowAllowUI();
@@ -111,7 +124,7 @@ public class StanAllowUIManager : MonoBehaviour
         {
             if (stanAllowUIList[i].CanShowUI)
             {
-                HideAllowUI(activeUI);
+                HideAllowUI(ActiveUI);
                 ShowAllowUI(stanAllowUIList[i], i);
                 return;
             }
@@ -120,7 +133,7 @@ public class StanAllowUIManager : MonoBehaviour
         {
             if (stanAllowUIList[i].CanShowUI)
             {
-                HideAllowUI(activeUI);
+                HideAllowUI(ActiveUI);
                 ShowAllowUI(stanAllowUIList[i], i);
                 return;
             }
@@ -139,7 +152,7 @@ public class StanAllowUIManager : MonoBehaviour
         {
             if (stanAllowUIList[i].CanShowUI)
             {
-                HideAllowUI(activeUI);
+                HideAllowUI(ActiveUI);
                 ShowAllowUI(stanAllowUIList[i], i);
                 return;
             }
@@ -148,7 +161,7 @@ public class StanAllowUIManager : MonoBehaviour
         {
             if (stanAllowUIList[i].CanShowUI)
             {
-                HideAllowUI(activeUI);
+                HideAllowUI(ActiveUI);
                 ShowAllowUI(stanAllowUIList[i], i);
                 return;
             }
