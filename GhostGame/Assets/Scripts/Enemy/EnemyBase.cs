@@ -40,11 +40,16 @@ public class EnemyBase : MonoBehaviour
     protected Transform targetTransform;
 
     //スタンなどの硬直時間
-    protected float maxFreezeTime = 10.0f;
+    protected float maxFreezeTime = 2.0f;
     protected float freezeTime = 0.0f;
 
     //元の色
     private Color normalColor;
+    public Color NormalColor
+    {
+        get { return normalColor; }
+        private set { normalColor = value; }
+    }
 
     //今動作している攻撃コルーチン
     protected Coroutine workingAttackCoroutine;
@@ -99,9 +104,12 @@ public class EnemyBase : MonoBehaviour
         stanPoint -= stanDamage;
         if(stanPoint <= 0)
         {
-            
             // スタン状態へ
             state = EnemyState.Freeze;
+            // 動いているコルーチンがあるなら停止
+            StopWorkingCoroutine();
+            // スタン値をリセット
+            stanPoint = maxStanPoint;
             // 色を青くする
             GameObject model = transform.Find("Mouse/default").gameObject;
             Material mat = model.GetComponent<MeshRenderer>().material;

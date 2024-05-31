@@ -79,7 +79,7 @@ public class MouseEnemy : EnemyBase
         }
         else if(state == EnemyState.Attack)
         {
-            if(!isAttack)
+            if(workingAttackCoroutine==null)
             {
                 int temp = Random.Range(0, 2);
                 if (temp == 0)
@@ -127,8 +127,7 @@ public class MouseEnemy : EnemyBase
 
         DisableAttackCollider();
 
-        isAttack = false;
-
+        workingAttackCoroutine = null;
         SetState(EnemyState.Idle);
     }
 
@@ -142,8 +141,7 @@ public class MouseEnemy : EnemyBase
 
         DisableStanAttackCollider();
 
-        isAttack = false;
-
+        workingAttackCoroutine = null;
         SetState(EnemyState.Idle);
 
     }

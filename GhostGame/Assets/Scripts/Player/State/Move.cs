@@ -41,15 +41,14 @@ public class Move : IState
             // ˆÚ“®ƒtƒ‰ƒO‚ðON
             ISmove = true;
         }
-            
         rb.velocity = velocity;
 
-        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].IsPressed();
+        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
         if (isLightAttack)
         {
             player.Change(player.lightAttack);
         }
-        isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].IsPressed();
+        isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame();
         if (isStanAttack)
         {
             player.Change(player.stanAttack);

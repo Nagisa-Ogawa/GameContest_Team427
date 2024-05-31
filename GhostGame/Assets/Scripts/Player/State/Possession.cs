@@ -14,55 +14,63 @@ public class Possession : IState
     Rigidbody rb;
 
     public Vector3 velocity;
+    GameObject possEnemy = null;
 
 
     public Possession(PlayerController player)
     {
         this.player = player;
+        rb=player.GetComponent<Rigidbody>();
     }
 
     public void Enter()
     {
-        rb = player.Rb;
         camera = Camera.main;
+        possEnemy = player.GetPossessionEnemy();
+        // 剛体のパラメータを変更
+        possEnemy.GetComponent<Rigidbody>().drag = 0;
+        possEnemy.GetComponent<Rigidbody>().angularDrag = 0.5f;
+        // 憑依した敵の色を戻す
+        // 色を戻す
+        GameObject model = possEnemy.transform.Find("Mouse/default").gameObject;
+        Material mat = model.GetComponent<MeshRenderer>().material;
+        mat.color = possEnemy.GetComponent<EnemyBase>().NormalColor;
+        StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
+        stanAllowUIManager.DeleteEnemyList(possEnemy);
 
     }
 
     public void Update()
     {
 
-        if (Input.GetAxis("Horizontal") != 0.0f || Input.GetAxis("Vertical") != 0.0f)
+        velocity = new Vector3(0, 0, 0);
+        moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
+        // カメラから見た左右と前後の入力値を受け取る
+        velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
+        velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
+        velocity = velocity.normalized * player.Speed;
+        if (velocity != Vector3.zero)
         {
-            velocity = new Vector3(0, 0, 0);
-            moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
-            // カメラから見た左右と前後の入力値を受け取る
-            velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
-            velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
-            velocity = velocity.normalized * player.Speed;
-            if (velocity != Vector3.zero)
-            {
-                // プレイヤーの向きを移動方向へ向かせる
-                //player.GetEnemy().transform.forward = velocity.normalized;
+            // プレイヤーの向きを移動方向へ向かせる
+            //player.GetEnemy().transform.forward = velocity.normalized;
 
-                Quaternion setRotation = Quaternion.LookRotation(velocity);
-                //算出した方向の角度に回転
-                player.GetPossessionEnemy().transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 10.0f * Time.deltaTime);
-
-
-            }
-
-            //player.Rb.velocity = velocity;
-
-            player.GetPossessionEnemy().GetComponent<Rigidbody>().velocity = velocity;
+            Quaternion setRotation = Quaternion.LookRotation(velocity);
+            //算出した方向の角度に回転
+            possEnemy.transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 10.0f * Time.deltaTime);
 
 
         }
+
+        //player.Rb.velocity = velocity;
+        possEnemy.GetComponent<Rigidbody>().velocity = velocity;
+
+
 
         player.transform.position = player.GetPossessionEnemy().transform.position - player.GetPossessionEnemy().transform.forward * 1.5f + player.transform.up * 1.0f;
 
         if (player.PlayerInput.currentActionMap["PossessionCancel"].IsPressed())
         {
-            player.GetPossessionEnemy().GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
+            possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
             player.ResetPossessionEnemy();
             player.GetComponent<CapsuleCollider>().isTrigger = false;
             player.Change(player.idle);
@@ -70,21 +78,24 @@ public class Possession : IState
 
         }
 
-        if (player.PlayerInput.currentActionMap["LightAttack"].IsPressed())
+        if (player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame())
         {
-            player.GetPossessionEnemy().GetComponent<EnemyBase>().Attack();
+            possEnemy.GetComponent<EnemyBase>().Attack();
         }
 
-        if (player.PlayerInput.currentActionMap["StanAttack"].IsPressed())
+        if (player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame())
         {
-            player.GetPossessionEnemy().GetComponent<EnemyBase>().StanAttack();
+            possEnemy.GetComponent<EnemyBase>().StanAttack();
         }
 
     }
 
     public void Exit()
     {
-
+        possEnemy.GetComponent<Rigidbody>().drag = 100;
+        possEnemy.GetComponent<Rigidbody>().angularDrag = 100;
+        // 憑依から解放する
+        possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
     }
 
 }

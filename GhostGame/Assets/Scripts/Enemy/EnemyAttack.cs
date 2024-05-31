@@ -38,7 +38,7 @@ public class EnemyAttack : MonoBehaviour
             //敵に当たってたらダメージ
             if (other.CompareTag("Enemy"))
             {
-                other.GetComponent<EnemyBase>().TakeDamage(enemy.damage);
+                other.GetComponentInParent<EnemyBase>().TakeDamage(enemy.damage);
                 Debug.Log("ダメージ8");
 
             }

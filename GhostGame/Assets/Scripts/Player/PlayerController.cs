@@ -117,12 +117,13 @@ public class PlayerController : MonoBehaviour
             stanAllowUIManager.PrevListEnemy();
         }
 
-        if (PlayerInput.currentActionMap["Possession"].IsPressed())
+        if (PlayerInput.currentActionMap["Possession"].WasPressedThisFrame())
         {
             if(possessionTargetEnemy != null)
             {
                 possessionEnemy = possessionTargetEnemy;
                 possessionEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Possession);
+                possessionEnemy.GetComponent<EnemyBase>().StopWorkingCoroutine();
                 GetComponent<CapsuleCollider>().isTrigger = true;
                 Change(possession);
             }
