@@ -33,14 +33,6 @@ public class PlayerController : MonoBehaviour
     // プレイヤーが憑依可能な距離
     public float possessionDistance = 10.0f;
 
-    [SerializeField]
-    private Rigidbody rb = null;
-    public Rigidbody Rb
-    {
-                get { return rb; }
-        private set { rb = value; }
-
-    }
 
     // 移動速度
     [SerializeField]
@@ -67,32 +59,6 @@ public class PlayerController : MonoBehaviour
     {
         get { return stanHitEffectObj; }
         private set { stanHitEffectObj = value; }
-    }
-
-    // プレイヤーの仮攻撃アニメーション用オブジェクト
-    [SerializeField]
-    private GameObject playerArmObj = null;
-    public GameObject PlayerArmObj
-    {
-        get { return playerArmObj; }
-        private set { playerArmObj = value; }
-    }
-
-    // スタン攻撃時の範囲用オブジェクト
-    [SerializeField]
-    private GameObject stanAttackAreaObj = null;
-    public GameObject StanAttackAreaObj
-    {
-        get { return stanAttackAreaObj; }
-        private set { stanAttackAreaObj = value; }
-    }
-
-    [SerializeField]
-    private GameObject stanAttackAreaModelObj = null;
-    public GameObject StanAttackAreaModelObj
-    {
-        get { return stanAttackAreaModelObj; }
-        private set { stanAttackAreaModelObj = value; }
     }
 
     private StanAllowUIManager stanAllowUIManager = null;
