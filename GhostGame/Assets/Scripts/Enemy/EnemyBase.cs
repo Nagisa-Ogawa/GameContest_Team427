@@ -39,12 +39,15 @@ public class EnemyBase : MonoBehaviour
     protected EnemyState state;
     protected Transform targetTransform;
 
-    //攻撃後などの硬直時間
+    //スタンなどの硬直時間
     protected float maxFreezeTime = 10.0f;
     protected float freezeTime = 0.0f;
 
     //元の色
     private Color normalColor;
+
+    //今動作している攻撃コルーチン
+    protected Coroutine workingAttackCoroutine;
 
 
     // Start is called before the first frame update
@@ -130,5 +133,19 @@ public class EnemyBase : MonoBehaviour
     {
         return state;
     }
+
+    //今動いている攻撃コルーチンを終了
+    public void StopWorkingCoroutine()
+    {
+        //今動いているコルーチンがあるなら
+        if(workingAttackCoroutine != null)
+        {
+            //コルーチン終了
+            StopCoroutine(workingAttackCoroutine);
+            //変数をnullに戻す
+            workingAttackCoroutine = null;
+        }
+    }
+
 
 }
