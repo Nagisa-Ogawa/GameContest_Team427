@@ -21,6 +21,7 @@ public class MouseEnemy : EnemyBase
     //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
     bool isAttack = false;
 
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -106,14 +107,14 @@ public class MouseEnemy : EnemyBase
     {
         base.Attack();
 
-        StartCoroutine("AttackCoroutine");
+        workingAttackCoroutine = StartCoroutine("AttackCoroutine");
     }
 
     public override void StanAttack()
     {
         base.StanAttack();
 
-        StartCoroutine("StanAttackCoroutine");        
+        workingAttackCoroutine = StartCoroutine("StanAttackCoroutine");        
     }
 
     private IEnumerator AttackCoroutine()
