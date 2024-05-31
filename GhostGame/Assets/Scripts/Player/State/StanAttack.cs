@@ -15,6 +15,7 @@ public class StanAttack : IState
     float setupTime = 1.0f; // 範囲攻撃の準備時間
     float hitTime = 0.1f;   // 範囲攻撃の当たり判定をする時間
 
+    GameObject areaObj = null;
     GameObject areaModelObj = null;
     float addScale = 0.0f;
     float areaScale = 6.0f;
@@ -27,7 +28,8 @@ public class StanAttack : IState
     public StanAttack(PlayerController player)
     {
         this.player = player;
-        areaModelObj = player.StanAttackAreaModelObj;
+        areaObj = GameObject.FindWithTag("PlayerStanArea");
+        areaModelObj = areaObj.transform.GetChild(0).gameObject;
     }
 
     public void Enter()
@@ -88,11 +90,11 @@ public class StanAttack : IState
         color.a = hitAlpha;
         mat.color = color;
         // 範囲スタン攻撃用コリジョンを表示
-        player.StanAttackAreaObj.GetComponent<SphereCollider>().enabled = true;
+        areaObj.GetComponent<SphereCollider>().enabled = true;
         // 少し待機
         yield return new WaitForSeconds(hitTime);
         // 範囲スタン攻撃用コリジョンを非表示
-        player.StanAttackAreaObj.GetComponent<SphereCollider>().enabled = false;
+        areaObj.GetComponent<SphereCollider>().enabled = false;
         areaModelObj.SetActive(false);
         // 現在時刻を取得
         lastAttackTime = Time.time;

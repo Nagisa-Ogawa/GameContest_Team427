@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Move : IState
 {
+    private Rigidbody rb;
     private PlayerController player;
     private Camera camera;
     public Vector3 velocity;
@@ -16,6 +17,7 @@ public class Move : IState
     public Move(PlayerController player)
     {
         this.player = player;
+        rb=player.GetComponent<Rigidbody>();
     }
 
     public void Enter()
@@ -40,7 +42,7 @@ public class Move : IState
             ISmove = true;
         }
             
-        player.Rb.velocity = velocity;
+        rb.velocity = velocity;
 
         isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].IsPressed();
         if (isLightAttack)
@@ -62,7 +64,7 @@ public class Move : IState
     public void Exit()
     {
         velocity = new Vector3(0, 0, 0);
-        player.Rb.velocity = new Vector3(0, 0, 0);
+        rb.velocity = new Vector3(0, 0, 0);
     }
 
 }
