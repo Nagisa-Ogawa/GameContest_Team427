@@ -43,15 +43,18 @@ public class Possession : IState
             {
                 // ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ğˆÚ“®•ûŒü‚ÖŒü‚©‚¹‚é
                 //player.GetEnemy().transform.forward = velocity.normalized;
+
+                Quaternion setRotation = Quaternion.LookRotation(velocity);
+                //Zo‚µ‚½•ûŒü‚ÌŠp“x‚É‰ñ“]
+                player.GetPossessionEnemy().transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 10.0f * Time.deltaTime);
+
+
             }
 
             //player.Rb.velocity = velocity;
 
             player.GetPossessionEnemy().GetComponent<Rigidbody>().velocity = velocity;
 
-            Quaternion setRotation = Quaternion.LookRotation(velocity);
-            //Zo‚µ‚½•ûŒü‚ÌŠp“x‚É‰ñ“]
-            player.GetPossessionEnemy().transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 5.0f * Time.deltaTime);
 
         }
 
