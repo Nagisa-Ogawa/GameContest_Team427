@@ -45,7 +45,7 @@ public class SphereSensor : MonoBehaviour
         if(target.gameObject.tag == "Player")
         {
             //攻撃状態または硬直状態じゃなければ更新
-            if (enemy.GetState() != EnemyBase.EnemyState.Freeze && enemy.GetState() != EnemyBase.EnemyState.Attack)
+            if (enemy.GetState() != EnemyBase.EnemyState.Freeze && enemy.GetState() != EnemyBase.EnemyState.Attack && enemy.GetState() != EnemyBase.EnemyState.Possession)
             {
                 //プレイヤーが憑依しているエネミーがいるなら
                 if(target.GetComponent<PlayerController>().GetPossessionEnemy() != null)
