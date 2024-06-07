@@ -18,9 +18,6 @@ public class GorillaEnemy : EnemyBase
     [SerializeField]
     float attackRange = 1.0f;
 
-    //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
-    bool isAttack = false;
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -76,19 +73,9 @@ public class GorillaEnemy : EnemyBase
         }
         else if (state == EnemyState.Attack)
         {
-            if (!isAttack)
+            if (workingAttackCoroutine == null)
             {
-                int temp = Random.Range(0, 2);
-                if (temp == 0)
-                {
-                    Attack();
-                }
-                else
-                {
-                    StanAttack();
-                }
-
-                isAttack = true;
+                Attack();
             }
 
         }
@@ -103,11 +90,24 @@ public class GorillaEnemy : EnemyBase
         StartCoroutine("AttackCoroutine");
     }
 
-    public override void StanAttack()
+    public override void PossessionAttack()
     {
-        base.StanAttack();
+        base.PossessionAttack();
 
-        StartCoroutine("StanAttackCoroutine");
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionAttackCoroutine");
+        }
+    }
+
+    public override void PossessionStanAttack()
+    {
+        base.PossessionStanAttack();
+
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionStanAttackCoroutine");
+        }
     }
 
     private IEnumerator AttackCoroutine()
@@ -116,22 +116,44 @@ public class GorillaEnemy : EnemyBase
 
         EnableAttackCollider();
 
+        PlayAttackEffect(attackCollider.gameObject);
+
         yield return new WaitForSeconds(1.2f);
 
         DisableAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
 
-        SetState(EnemyState.Chase, targetTransform);
+        workingAttackCoroutine = null;
 
-        isAttack = false;
+        SetState(EnemyState.Chase, targetTransform);
     }
 
-    private IEnumerator StanAttackCoroutine()
+    private IEnumerator PossessionAttackCoroutine()
+    {
+        yield return new WaitForSeconds(0.6f);
+
+        EnableAttackCollider();
+
+        PlayAttackEffect(attackCollider.gameObject);
+
+        yield return new WaitForSeconds(1.2f);
+
+        DisableAttackCollider();
+
+        yield return new WaitForSeconds(1.0f);
+
+        workingAttackCoroutine = null;
+    }
+
+
+    private IEnumerator PossessionStanAttackCoroutine()
     {
         yield return new WaitForSeconds(0.2f);
 
         EnableStanAttackCollider();
+
+        PlayAttackEffect(stanAttackCollider.gameObject);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -139,10 +161,7 @@ public class GorillaEnemy : EnemyBase
 
         yield return new WaitForSeconds(1.0f);
 
-        SetState(EnemyState.Chase, targetTransform);
-
-        isAttack = false;
-
+        workingAttackCoroutine = null;
     }
 
     public void SetDestination(Vector3 position)
@@ -161,8 +180,6 @@ public class GorillaEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = true;
-            // Debug.Log("attack enable");
-
         }
     }
 
@@ -171,7 +188,6 @@ public class GorillaEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = false;
-            // Debug.Log("attack disable");
         }
     }
 
@@ -180,8 +196,6 @@ public class GorillaEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = true;
-            //Debug.Log("stanattack enable");
-
         }
     }
 
@@ -190,7 +204,6 @@ public class GorillaEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = false;
-            // Debug.Log("stanattack disable");
         }
     }
 }

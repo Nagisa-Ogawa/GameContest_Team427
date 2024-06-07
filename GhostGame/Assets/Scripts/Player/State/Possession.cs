@@ -42,9 +42,22 @@ public class Possession : IState
 
     public void Update()
     {
+        //憑依しているエネミーが非アクティブだったら(倒されたら)
+        if(possEnemy.activeInHierarchy == false)
+        {
+            player.GetComponent<PlayerController>().Change(player.idle);
+            player.GetComponent<PlayerController>().ResetPossessionEnemy();
+            return;
+        }
 
         velocity = new Vector3(0, 0, 0);
-        moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
+
+        //憑依しているエネミーが攻撃中じゃなければ入力を受け取る
+        if(possEnemy.GetComponent<EnemyBase>().GetWorkingAttackCoroutine() == null)
+        {
+            moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
+        }
+        
         // カメラから見た左右と前後の入力値を受け取る
         velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
         velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
@@ -57,7 +70,7 @@ public class Possession : IState
             Quaternion setRotation = Quaternion.LookRotation(velocity);
             //算出した方向の角度に回転
             possEnemy.transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 10.0f * Time.deltaTime);
-
+            player.transform.rotation = Quaternion.Slerp(player.GetPossessionEnemy().transform.rotation, setRotation, 10.0f * Time.deltaTime);
 
         }
 
@@ -80,12 +93,12 @@ public class Possession : IState
 
         if (player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame())
         {
-            possEnemy.GetComponent<EnemyBase>().Attack();
+            possEnemy.GetComponent<EnemyBase>().PossessionAttack();
         }
 
         if (player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame())
         {
-            possEnemy.GetComponent<EnemyBase>().StanAttack();
+            possEnemy.GetComponent<EnemyBase>().PossessionStanAttack();
         }
 
     }

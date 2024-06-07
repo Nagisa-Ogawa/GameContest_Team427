@@ -40,7 +40,7 @@ public class EnemyBase : MonoBehaviour
     protected Transform targetTransform;
 
     //スタンなどの硬直時間
-    protected float maxFreezeTime = 2.0f;
+    protected float maxFreezeTime = 10.0f;
     protected float freezeTime = 0.0f;
 
     //元の色
@@ -54,13 +54,22 @@ public class EnemyBase : MonoBehaviour
     //今動作している攻撃コルーチン
     protected Coroutine workingAttackCoroutine;
 
+    //攻撃エフェクト
+    [SerializeField]
+    protected GameObject hitEffectObj = null;
 
-    // Start is called before the first frame update
-    protected virtual void Start()
+
+    protected virtual void Awake()
     {
         hp = maxHp;
         stanPoint = maxStanPoint;
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+    }
+
+    // Start is called before the first frame update
+    protected virtual void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -127,14 +136,16 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void Attack() { }
 
-    public virtual void StanAttack() { }
+    public virtual void PossessionAttack() { }
+
+    public virtual void PossessionStanAttack() { }
+
 
 
     public void SetState(EnemyState tempstate, Transform targetObject = null)
     {
         state = tempstate;
         targetTransform = targetObject;
-
     }
 
     public EnemyState GetState()
@@ -155,5 +166,20 @@ public class EnemyBase : MonoBehaviour
         }
     }
 
+    public Coroutine GetWorkingAttackCoroutine()
+    {
+        return workingAttackCoroutine;
+    }
+
+    public void PlayAttackEffect(GameObject target)
+    {
+        // 攻撃エフェクトを作成
+        GameObject hitEffectObj = GameObject.Instantiate(player.HitEffectObj, target.transform.position, Quaternion.identity);
+        Camera camera = Camera.main;
+        hitEffectObj.transform.position = Vector3.Lerp(target.transform.position, camera.transform.position, 0.1f);
+        ParticleSystem hitEffect = hitEffectObj.GetComponent<ParticleSystem>();
+        hitEffect.Play();
+
+    }
 
 }
