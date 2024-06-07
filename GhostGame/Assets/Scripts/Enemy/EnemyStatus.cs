@@ -4,41 +4,10 @@ using UnityEngine;
 
 public class EnemyStatus : MonoBehaviour
 {
-    //“G‚ÌMaxHP
-    [SerializeField]
-    private int maxhp = 10;
-    //“G‚ÌHP
-    [SerializeField]
-    private int hp;
-
     //•\Ž¦—pUI
     [SerializeField]
     private GameObject ChoiceUI;
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        hp = maxhp;
-
-    }
-
-    public void SetHP(int hp)
-    {
-        this.hp = hp;
-
-        if(hp > 0 )
-        {
-            HideStatusUI();
-           
-        }
-       else if (hp <= 0)
-        {
-            Debug.Log("test");
-            //UI‚ð•\Ž¦‚·‚é
-            StatusUI();
-        }
-    }
 
     public void HideStatusUI()//¶‚«‚Ä‚½‚çUI‚ð”ñ•\Ž¦‚É‚·‚é
     {
@@ -50,14 +19,5 @@ public class EnemyStatus : MonoBehaviour
         ChoiceUI.SetActive(true);
     }
 
-   
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKey(KeyCode.Return))
-        {
-            SetHP(0);
-        }
-    }
+  
 }

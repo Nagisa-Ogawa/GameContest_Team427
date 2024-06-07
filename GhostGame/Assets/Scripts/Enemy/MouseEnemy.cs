@@ -94,7 +94,11 @@ public class MouseEnemy : EnemyBase
             }
             
         }
-        
+        else if(state == EnemyState.Freeze)
+        {
+            Freeze();
+            Debug.Log("freeze");
+        }
 
     }
 
@@ -195,4 +199,16 @@ public class MouseEnemy : EnemyBase
            // Debug.Log("stanattack disable");
         }
     }
+
+    public override void Freeze()
+    {
+        base.Freeze();
+        stanTime += Time.deltaTime;
+
+        if (stanTime >= 5.0f)
+        {
+            SetState(EnemyState.Idle);
+        }
+    }
+
 }

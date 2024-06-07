@@ -15,13 +15,14 @@ public class EnemyBase : MonoBehaviour
 
 
     [SerializeField]
-    int maxHp;
-    int hp;
+    public int maxHp;
+    public int hp;
     [SerializeField]
     int maxStanPoint;
     int stanPoint;
 
     bool isStan;
+    public float stanTime;
 
     int damage;
     int stanDamage;
@@ -36,6 +37,7 @@ public class EnemyBase : MonoBehaviour
 
     protected EnemyState state;
     protected Transform targetTransform;
+    protected EnemyGage enemyGage;
 
 
 
@@ -47,6 +49,10 @@ public class EnemyBase : MonoBehaviour
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         if (player != null)
             Debug.Log("ai");
+
+        //Object‚ðŽæ“¾  Ž©•ª‚ÌŽq‹Ÿ‚ÌEnemyGage‚Ì‚Ý‚ðŽæ“¾
+        enemyGage = transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
+        enemyGage.SetEnemy(this);
     }
 
     // Update is called once per frame
@@ -57,6 +63,8 @@ public class EnemyBase : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        enemyGage.GageReduction(damage);
+
         hp -= damage;
         if(hp <= 0)
         {
@@ -69,6 +77,7 @@ public class EnemyBase : MonoBehaviour
         stanPoint -= stanDamage;
         if(stanPoint <= 0)
         {
+            SetState(EnemyState.Freeze);
 
         }
     }
@@ -77,6 +86,7 @@ public class EnemyBase : MonoBehaviour
 
     public virtual void StanAttack() { }
 
+    public virtual void Freeze() { }
 
     public void SetState(EnemyState tempstate, Transform targetObject = null)
     {

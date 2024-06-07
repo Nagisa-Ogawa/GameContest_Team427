@@ -24,11 +24,11 @@ public class Idle :IState
         {
             player.Change(player.move);
         }
-        if (Input.GetKeyDown("joystick button 2"))
+        if (Input.GetKeyDown("joystick button 2") || Input.GetKey(KeyCode.J))
         {
             player.Change(player.lightAttack);
         }
-        if(Input.GetKeyDown("joystick button 4"))
+        if(Input.GetKeyDown("joystick button 4") || Input.GetKey(KeyCode.L))
         {
             player.Change(player.stanAttack);
         }

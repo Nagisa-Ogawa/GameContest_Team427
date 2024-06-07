@@ -14,11 +14,11 @@ public class PlayerController : MonoBehaviour
     public Move move;
     public LightAttack lightAttack;
     public StanAttack stanAttack;
-
+    protected PlayerGage playerGage;
 
     [SerializeField]
-    int maxHp;
-    int hp;
+    public int maxHp;
+    public int hp;
     [SerializeField]
     int maxStanPoint;
     int stanPoint;
@@ -79,6 +79,10 @@ public class PlayerController : MonoBehaviour
         Change(idle);
 
         hp = maxHp;
+
+        playerGage = GameObject.FindObjectOfType<PlayerGage>();
+        playerGage.SetPlayer(this);
+
     }
 
     public void Change(IState nextState)
@@ -105,6 +109,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        playerGage.GageReduction(damage);
+
         hp -= damage;
         Debug.Log("”í’e:Žc‚èHP" + hp);
         if (hp < 0)
