@@ -18,9 +18,6 @@ public class MouseEnemy : EnemyBase
     [SerializeField]
     float attackRange = 3.0f;
 
-    //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
-    bool isAttack = false;
-
 
     // Start is called before the first frame update
     protected override void Start()
@@ -81,17 +78,7 @@ public class MouseEnemy : EnemyBase
         {
             if(workingAttackCoroutine==null)
             {
-                int temp = Random.Range(0, 2);
-                if (temp == 0)
-                {
-                    Attack();
-                }
-                else
-                {
-                    StanAttack();
-                }
-
-                isAttack = true;
+                Attack();
             }
             
         }
@@ -110,11 +97,25 @@ public class MouseEnemy : EnemyBase
         workingAttackCoroutine = StartCoroutine("AttackCoroutine");
     }
 
-    public override void StanAttack()
+    public override void PossessionAttack()
     {
-        base.StanAttack();
+        base.PossessionAttack();
 
-        workingAttackCoroutine = StartCoroutine("StanAttackCoroutine");        
+        if(workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionAttackCoroutine");
+        }
+    }
+
+
+    public override void PossessionStanAttack()
+    {
+        base.PossessionStanAttack();
+
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionStanAttackCoroutine");
+        }
     }
 
     private IEnumerator AttackCoroutine()
@@ -123,28 +124,52 @@ public class MouseEnemy : EnemyBase
 
         EnableAttackCollider();
 
+        PlayAttackEffect(attackCollider.gameObject);
+
         yield return new WaitForSeconds(0.2f);
 
         DisableAttackCollider();
+
+        yield return new WaitForSeconds(1.0f);
 
         workingAttackCoroutine = null;
         SetState(EnemyState.Idle);
     }
 
-    private IEnumerator StanAttackCoroutine()
+    private IEnumerator PossessionAttackCoroutine()
+    {
+        yield return new WaitForSeconds(0.6f);
+
+        EnableAttackCollider();
+
+        PlayAttackEffect(attackCollider.gameObject);
+
+        yield return new WaitForSeconds(0.2f);
+
+        DisableAttackCollider();
+
+        yield return new WaitForSeconds(1.0f);
+
+        workingAttackCoroutine = null;
+    }
+
+    private IEnumerator PossessionStanAttackCoroutine()
     {
         yield return new WaitForSeconds(0.2f);
 
         EnableStanAttackCollider();
 
+        PlayAttackEffect(stanAttackCollider.gameObject);
+
         yield return new WaitForSeconds(0.2f);
 
         DisableStanAttackCollider();
 
-        workingAttackCoroutine = null;
-        SetState(EnemyState.Idle);
+        yield return new WaitForSeconds(1.0f);
 
+        workingAttackCoroutine = null;
     }
+
 
     public void SetDestination(Vector3 position)
     {
@@ -162,8 +187,6 @@ public class MouseEnemy : EnemyBase
         if(attackCollider != null)
         {
             attackCollider.enabled = true;
-           // Debug.Log("attack enable");
-
         }
     }
 
@@ -172,7 +195,6 @@ public class MouseEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = false;
-           // Debug.Log("attack disable");
         }
     }
 
@@ -181,8 +203,6 @@ public class MouseEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = true;
-            //Debug.Log("stanattack enable");
-
         }
     }
 
@@ -191,7 +211,6 @@ public class MouseEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = false;
-           // Debug.Log("stanattack disable");
         }
     }
 }

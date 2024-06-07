@@ -252,12 +252,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 10
   maxStanPoint: 5
-  damage: 0
-  stanDamage: 0
+  damage: 8
+  stanDamage: 5
   moveSpeed: 2
   attackInterval: 5
   player: {fileID: 0}
   state: 0
+  hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
   attackCollider: {fileID: 923039372756691483}
   stanAttackCollider: {fileID: 144540385328836664}
   attackRange: 3

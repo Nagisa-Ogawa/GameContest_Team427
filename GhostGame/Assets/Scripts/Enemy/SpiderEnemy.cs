@@ -15,8 +15,6 @@ public class SpiderEnemy : EnemyBase
     float attackRange = 0.8f;
     [SerializeField]
     GameObject bullet;
-    //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
-    bool isAttack = false;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -71,13 +69,9 @@ public class SpiderEnemy : EnemyBase
         }
         else if (state == EnemyState.Attack)
         {
-            if (!isAttack)
+            if (workingAttackCoroutine == null)
             {
                 Attack();
-
-                
-            
-                isAttack = true;
             }
 
         }
@@ -92,11 +86,24 @@ public class SpiderEnemy : EnemyBase
         StartCoroutine("AttackCoroutine");
     }
 
-    public override void StanAttack()
+    public override void PossessionAttack()
     {
-        base.StanAttack();
+        base.PossessionAttack();
 
-        StartCoroutine("StanAttackCoroutine");
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionAttackCoroutine");
+        }
+    }
+
+    public override void PossessionStanAttack()
+    {
+        base.PossessionStanAttack();
+
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionStanAttackCoroutine");
+        }
     }
 
     private IEnumerator AttackCoroutine()
@@ -105,18 +112,39 @@ public class SpiderEnemy : EnemyBase
 
         EnableAttackCollider();
 
+        PlayAttackEffect(attackCollider.gameObject);
+
         yield return new WaitForSeconds(1.2f);
 
         DisableAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
 
-        SetState(EnemyState.Chase, targetTransform);
+        workingAttackCoroutine = null;
 
-        isAttack = false;
+        SetState(EnemyState.Chase, targetTransform);
     }
 
-    private IEnumerator StanAttackCoroutine()
+    private IEnumerator PossessionAttackCoroutine()
+    {
+        yield return new WaitForSeconds(0.6f);
+
+        EnableAttackCollider();
+
+        PlayAttackEffect(attackCollider.gameObject);
+
+        yield return new WaitForSeconds(1.2f);
+
+        DisableAttackCollider();
+
+        yield return new WaitForSeconds(1.0f);
+
+        workingAttackCoroutine = null;
+    }
+
+
+
+    private IEnumerator PossessionStanAttackCoroutine()
     {
         yield return new WaitForSeconds(0.5f);
         Vector3 pos = transform.position + transform.forward*2.0f;
@@ -130,11 +158,8 @@ public class SpiderEnemy : EnemyBase
         //DisableStanAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
-        
-        SetState(EnemyState.Chase, targetTransform);
 
-        isAttack = false;
-
+        workingAttackCoroutine = null;
     }
 
 
@@ -143,8 +168,6 @@ public class SpiderEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = true;
-            // Debug.Log("attack enable");
-
         }
     }
 
@@ -153,7 +176,6 @@ public class SpiderEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = false;
-            // Debug.Log("attack disable");
         }
     }
 
@@ -162,8 +184,6 @@ public class SpiderEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = true;
-            //Debug.Log("stanattack enable");
-
         }
     }
 
@@ -172,7 +192,6 @@ public class SpiderEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = false;
-            // Debug.Log("stanattack disable");
         }
     }
 }

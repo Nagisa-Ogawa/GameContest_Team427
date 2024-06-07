@@ -37,7 +37,7 @@ public class EnemyStanAttack : MonoBehaviour
             //敵に当たってたらダメージ
             if (other.CompareTag("Enemy"))
             {
-                other.GetComponent<EnemyBase>().TakeStanDamage(enemy.stanDamage);
+                other.GetComponentInParent<EnemyBase>().TakeStanDamage(enemy.stanDamage);
                 Debug.Log("スタンダメージ５");
 
             }

@@ -5,11 +5,13 @@ using UnityEngine;
 public class EnemyAttack : MonoBehaviour
 {
     private EnemyBase enemy;
+    private PlayerController player;
 
     // Start is called before the first frame update
     void Start()
     {
         enemy = transform.parent.GetComponent<EnemyBase>();
+        player = enemy.player;
     }
 
     // Update is called once per frame
@@ -20,17 +22,34 @@ public class EnemyAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        //憑依状態じゃなければ
+        //エネミーが憑依状態じゃなければ
         if (enemy.GetState() != EnemyBase.EnemyState.Possession)
         {
-            //プレイヤーに当たってたらダメージ
-            if (other.CompareTag("Player"))
+            //プレイヤーが憑依している敵がいなかったら
+            if(player.GetPossessionEnemy() == null)
             {
-                enemy.player.TakeDamage(enemy.damage);
-                Debug.Log("ダメージ8");
+                //プレイヤーに当たってたらダメージ
+                if (other.CompareTag("Player"))
+                {
+                    player.TakeDamage(enemy.damage);
+                    Debug.Log("ダメージ8");
 
+                }
             }
+            else
+            {
+                //エネミーに当たってて
+                if (other.CompareTag("Enemy"))
+                {
+                    //そのエネミーが憑依状態だったら
+                    if(other.gameObject.GetComponentInParent<EnemyBase>().GetState() == EnemyBase.EnemyState.Possession)
+                    {
+                        Debug.Log("エネミーがエネミーにダメージ");
+                        player.GetPossessionEnemy().GetComponent<EnemyBase>().TakeDamage(enemy.damage);
+                    }
+                }
+            }
+            
         }
         //憑依状態だったら
         else
@@ -40,7 +59,6 @@ public class EnemyAttack : MonoBehaviour
             {
                 other.GetComponentInParent<EnemyBase>().TakeDamage(enemy.damage);
                 Debug.Log("ダメージ8");
-
             }
         }
     }

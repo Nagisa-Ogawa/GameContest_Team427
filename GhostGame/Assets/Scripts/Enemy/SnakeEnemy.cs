@@ -15,8 +15,6 @@ public class SnakeEnemy : EnemyBase
     float attackRange = 0.8f;
     [SerializeField]
     GameObject bullet;
-    //çUåÇçsìÆíÜÇ©Ç«Ç§Ç©
-    bool isAttack = false;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -71,21 +69,9 @@ public class SnakeEnemy : EnemyBase
         }
         else if (state == EnemyState.Attack)
         {
-            if (!isAttack)
+            if (workingAttackCoroutine == null)
             {
-                int temp = Random.Range(0, 2);
-                if (temp == 0)
-                {
-                    Attack();
-                    Debug.Log("attack");
-                }
-                else
-                {
-                    StanAttack();
-                    Debug.Log("stanattack");
-                }
-
-                isAttack = true;
+                Attack();
             }
 
         }
@@ -100,11 +86,24 @@ public class SnakeEnemy : EnemyBase
         StartCoroutine("AttackCoroutine");
     }
 
-    public override void StanAttack()
+    public override void PossessionAttack()
     {
-        base.StanAttack();
+        base.PossessionAttack();
 
-        StartCoroutine("StanAttackCoroutine");
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionAttackCoroutine");
+        }
+    }
+
+    public override void PossessionStanAttack()
+    {
+        base.PossessionStanAttack();
+
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("PossessionStanAttackCoroutine");
+        }
     }
 
     private IEnumerator AttackCoroutine()
@@ -113,18 +112,38 @@ public class SnakeEnemy : EnemyBase
 
         EnableAttackCollider();
 
+        PlayAttackEffect(attackCollider.gameObject);
+
         yield return new WaitForSeconds(1.2f);
 
         DisableAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
 
-        SetState(EnemyState.Chase, targetTransform);
+        workingAttackCoroutine = null;
 
-        isAttack = false;
+        SetState(EnemyState.Chase, targetTransform);
     }
 
-    private IEnumerator StanAttackCoroutine()
+    private IEnumerator PossessionAttackCoroutine()
+    {
+        yield return new WaitForSeconds(0.6f);
+
+        EnableAttackCollider();
+
+        PlayAttackEffect(attackCollider.gameObject);
+
+        yield return new WaitForSeconds(1.2f);
+
+        DisableAttackCollider();
+
+        yield return new WaitForSeconds(1.0f);
+
+        workingAttackCoroutine = null;
+    }
+
+
+    private IEnumerator PossessionStanAttackCoroutine()
     {
         yield return new WaitForSeconds(0.5f);
         Vector3 pos = transform.position + transform.forward * 2.0f;
@@ -136,11 +155,8 @@ public class SnakeEnemy : EnemyBase
         DisableStanAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
-       
-        SetState(EnemyState.Chase, targetTransform);
 
-        isAttack = false;
-
+        workingAttackCoroutine = null;
     }
 
 
@@ -149,8 +165,6 @@ public class SnakeEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = true;
-            // Debug.Log("attack enable");
-
         }
     }
 
@@ -159,7 +173,6 @@ public class SnakeEnemy : EnemyBase
         if (attackCollider != null)
         {
             attackCollider.enabled = false;
-            // Debug.Log("attack disable");
         }
     }
 
@@ -168,8 +181,6 @@ public class SnakeEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = true;
-            //Debug.Log("stanattack enable");
-
         }
     }
 
@@ -178,7 +189,6 @@ public class SnakeEnemy : EnemyBase
         if (stanAttackCollider != null)
         {
             stanAttackCollider.enabled = false;
-            // Debug.Log("stanattack disable");
         }
     }
 }
