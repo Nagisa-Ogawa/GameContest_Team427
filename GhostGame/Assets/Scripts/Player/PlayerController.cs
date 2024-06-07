@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,27 +14,26 @@ public class PlayerController : MonoBehaviour
     public Move move;
     public LightAttack lightAttack;
     public StanAttack stanAttack;
-    public Possession possession;
-
+    protected PlayerGage playerGage;
 
     [SerializeField]
-    int maxHp;
-    int hp;
+    public int maxHp;
+    public int hp;
     [SerializeField]
     int maxStanPoint;
     int stanPoint;
 
     bool isStan;
 
-    //今憑依しているエネミー
-    private GameObject possessionEnemy = null;
-    //憑依対象になっているエネミー
-    public GameObject possessionTargetEnemy = null;
-    // プレイヤーが憑依可能な距離
-    public float possessionDistance = 10.0f;
+    [SerializeField]
+    private Rigidbody rb = null;
+    public Rigidbody Rb
+    {
+                get { return rb; }
+        private set { rb = value; }
 
+    }
 
-    // 移動速度
     [SerializeField]
     private float speed = 3.0f; 
     public float Speed
@@ -43,7 +42,6 @@ public class PlayerController : MonoBehaviour
         private set {speed = value; }
     }
 
-    // 攻撃ヒット時のエフェクト
     [SerializeField]
     private GameObject hitEffectObj = null;
     public GameObject HitEffectObj
@@ -52,7 +50,6 @@ public class PlayerController : MonoBehaviour
         private set { hitEffectObj = value; }
     }
 
-    // スタン攻撃ヒット時のエフェクト
     [SerializeField]
     private GameObject stanHitEffectObj = null;
     public GameObject StanHitEffectObj
@@ -61,15 +58,16 @@ public class PlayerController : MonoBehaviour
         private set { stanHitEffectObj = value; }
     }
 
-    private StanAllowUIManager stanAllowUIManager = null;
 
-    // プレイヤーインプット
-    PlayerInput playerInput = null;
-    public PlayerInput PlayerInput
+    [SerializeField]
+    private GameObject playerArmObj = null;
+    public GameObject PlayerArmObj
     {
-        get { return playerInput; }
-        private set { playerInput = value; }
+        get { return playerArmObj; }
+        private set { playerArmObj = value; }
     }
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -77,14 +75,14 @@ public class PlayerController : MonoBehaviour
         move = new Move(this);
         lightAttack = new LightAttack(this);
         stanAttack= new StanAttack(this);
-        possession = new Possession(this);
-
-        playerInput=GetComponent<PlayerInput>();
-        stanAllowUIManager=GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
 
         Change(idle);
 
         hp = maxHp;
+
+        playerGage = GameObject.FindObjectOfType<PlayerGage>();
+        playerGage.SetPlayer(this);
+
     }
 
     public void Change(IState nextState)
@@ -107,32 +105,12 @@ public class PlayerController : MonoBehaviour
         {
             currentState.Update();
         }
-        // 憑依対象変更入力
-        if (playerInput.currentActionMap["NextTarget"].WasPressedThisFrame())
-        {
-            stanAllowUIManager.NextListEnemy();
-        }
-        if (playerInput.currentActionMap["PrevTarget"].WasPressedThisFrame())
-        {
-            stanAllowUIManager.PrevListEnemy();
-        }
-
-        if (PlayerInput.currentActionMap["Possession"].WasPressedThisFrame())
-        {
-            if(possessionTargetEnemy != null)
-            {
-                possessionEnemy = possessionTargetEnemy;
-                possessionEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Possession);
-                possessionEnemy.GetComponent<EnemyBase>().StopWorkingCoroutine();
-                GetComponent<CapsuleCollider>().isTrigger = true;
-                Change(possession);
-            }
-            
-        }
     }
 
     public void TakeDamage(int damage)
     {
+        playerGage.GageReduction(damage);
+
         hp -= damage;
         Debug.Log("被弾:残りHP" + hp);
         if (hp < 0)
@@ -155,18 +133,5 @@ public class PlayerController : MonoBehaviour
             // スタン時の処理
             stanPoint = 0;
         }
-    }
-
-    //今憑依しているエネミーを取得
-    public GameObject GetPossessionEnemy()
-    {
-        return possessionEnemy;
-    }
-
-    //憑依解除時に使用
-    //憑依中エネミー変数をnullにする
-    public void ResetPossessionEnemy()
-    {
-        possessionEnemy = null;
     }
 }
