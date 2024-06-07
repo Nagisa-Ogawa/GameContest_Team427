@@ -16,11 +16,11 @@ public class EnemyBase : MonoBehaviour
 
 
     [SerializeField]
-    int maxHp;
-    int hp;
+    public int maxHp;
+    public int hp;
     [SerializeField]
-    int maxStanPoint;
-    int stanPoint;
+    public int maxStanPoint;
+    public int stanPoint;
 
     bool isStan;
 
@@ -58,6 +58,9 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     protected GameObject hitEffectObj = null;
 
+    //EnemyHPƒQ[ƒW
+    protected EnemyGage enemyGage;
+
 
     protected virtual void Awake()
     {
@@ -69,7 +72,10 @@ public class EnemyBase : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        
+        //Object‚ğæ“¾  ©•ª‚Ìq‹Ÿ‚ÌEnemyGage‚Ì‚İ‚ğæ“¾
+        enemyGage = transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
+        enemyGage.SetEnemy(this);
+
     }
 
     // Update is called once per frame
@@ -101,6 +107,8 @@ public class EnemyBase : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        enemyGage.GageReduction(damage);
+
         hp -= damage;
         if(hp <= 0)
         {
