@@ -6,10 +6,11 @@ using UnityEngine.Audio;
 
 public class AudioSetting : MonoBehaviour
 {
-
+    [SerializeField] Slider MasterSlider;//音量調整用スライダー
     [SerializeField] Slider BGMSlider;//音量調整用スライダー
     [SerializeField] Slider SESlider;//音量調整用スライダー
 
+    static float MasterVolume = 0.0f; //保存用
     static float BGMVolume = 0.0f; //保存用
     static float SEVolume = 0.0f; //保存用
 
@@ -21,10 +22,16 @@ public class AudioSetting : MonoBehaviour
 
     void Awake()
     {
+        MasterSlider.value = MasterVolume;
         BGMSlider.value = BGMVolume;
         SESlider.value = SEVolume;
     }
 
+    public void SetMaster(float volume)
+    {
+        audioMixer.SetFloat("MasterVol", volume);
+        BGMVolume = volume;
+    }
     public void SetBGM(float volume)
     {
         audioMixer.SetFloat("BGMVol", volume);
