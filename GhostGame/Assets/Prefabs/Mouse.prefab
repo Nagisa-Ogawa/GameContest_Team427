@@ -662,6 +662,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 65a1436403df97947b8e0a9a019e0b06, type: 3}
+      propertyPath: m_TagString
+      value: MeshColor
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
