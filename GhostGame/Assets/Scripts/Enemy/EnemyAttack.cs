@@ -22,6 +22,8 @@ public class EnemyAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("aaa");
+
         //エネミーが憑依状態じゃなければ
         if (enemy.GetState() != EnemyBase.EnemyState.Possession)
         {
