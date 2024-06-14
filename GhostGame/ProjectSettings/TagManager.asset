@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - StanAllowUIManager
+  - PlayerStanArea
+  - PlayerArm
+  - MeshColor
   layers:
   - Default
   - TransparentFX
