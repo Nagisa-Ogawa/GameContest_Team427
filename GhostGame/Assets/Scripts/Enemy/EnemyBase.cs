@@ -92,8 +92,8 @@ public class EnemyBase : MonoBehaviour
             {
                 freezeTime = maxFreezeTime;
                 // 色を戻す
-                GameObject model = transform.Find("Mouse/default").gameObject;
-                Material mat = model.GetComponent<MeshRenderer>().material;
+                //GameObject model = transform.Find("Mouse/default").gameObject;
+                Material mat = transform.GetComponentInChildren<MeshRenderer>().material;
                 mat.color = normalColor;
                 StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
                 stanAllowUIManager.DeleteEnemyList(gameObject);
@@ -128,10 +128,10 @@ public class EnemyBase : MonoBehaviour
             // スタン値をリセット
             stanPoint = maxStanPoint;
             // 色を青くする
-            GameObject model = transform.Find("Mouse/default").gameObject;
-            Material mat = model.GetComponent<MeshRenderer>().material;
+            //GameObject model = transform.GetComponentInChildren<MeshRenderer>().material;
+            Material mat = transform.GetComponentInChildren<MeshRenderer>().material;
             // 元の色を覚えておく
-            normalColor=mat.color;
+            normalColor =mat.color;
             Color color = mat.color;
             color.b = 1.0f;
             mat.color = color;

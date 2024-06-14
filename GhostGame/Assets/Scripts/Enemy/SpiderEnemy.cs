@@ -83,7 +83,11 @@ public class SpiderEnemy : EnemyBase
     {
         base.Attack();
 
-        StartCoroutine("AttackCoroutine");
+        if (workingAttackCoroutine == null)
+        {
+            workingAttackCoroutine = StartCoroutine("AttackCoroutine");
+        }
+            
     }
 
     public override void PossessionAttack()
@@ -147,15 +151,12 @@ public class SpiderEnemy : EnemyBase
     private IEnumerator PossessionStanAttackCoroutine()
     {
         yield return new WaitForSeconds(0.5f);
-        Vector3 pos = transform.position + transform.forward*2.0f;
+        Vector3 pos = transform.position + transform.forward * 2.0f;
         GameObject go;
-       go = Instantiate(bullet,pos,Quaternion.identity);
-        Vector3 dir = targetTransform.position - transform.position;
+        go = Instantiate(bullet,pos,Quaternion.identity);
+        Vector3 dir = transform.forward;
         dir = dir.normalized;
         go.GetComponent<SpiderBullet>().SetDirection(dir);
-        //yield return new WaitForSeconds(1.5f);
-
-        //DisableStanAttackCollider();
 
         yield return new WaitForSeconds(1.0f);
 

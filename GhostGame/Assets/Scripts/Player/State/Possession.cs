@@ -32,8 +32,8 @@ public class Possession : IState
         possEnemy.GetComponent<Rigidbody>().angularDrag = 0.5f;
         // œßˆË‚µ‚½“G‚ÌF‚ğ–ß‚·
         // F‚ğ–ß‚·
-        GameObject model = possEnemy.transform.Find("Mouse/default").gameObject;
-        Material mat = model.GetComponent<MeshRenderer>().material;
+        //GameObject model = possEnemy.transform.Find("Mouse/default").gameObject;
+        Material mat = possEnemy.transform.GetComponentInChildren<MeshRenderer>().material;
         mat.color = possEnemy.GetComponent<EnemyBase>().NormalColor;
         StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
         stanAllowUIManager.DeleteEnemyList(possEnemy);
