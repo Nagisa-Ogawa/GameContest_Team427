@@ -20,7 +20,7 @@ public class AudioSetting : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip testSound;
 
-    void Awake()
+    void OnEnable()
     {
         MasterSlider.value = MasterVolume;
         BGMSlider.value = BGMVolume;
@@ -30,7 +30,7 @@ public class AudioSetting : MonoBehaviour
     public void SetMaster(float volume)
     {
         audioMixer.SetFloat("MasterVol", volume);
-        BGMVolume = volume;
+        MasterVolume = volume;
     }
     public void SetBGM(float volume)
     {
