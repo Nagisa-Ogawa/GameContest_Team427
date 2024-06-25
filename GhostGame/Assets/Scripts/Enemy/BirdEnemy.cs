@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
 
-public class TigerEnenmy : EnemyBase
+public class BirdEnemy : EnemyBase
 {
     [SerializeField]
     BoxCollider attackCollider;
@@ -14,16 +14,22 @@ public class TigerEnenmy : EnemyBase
     [SerializeField]
     float attackRange = 1.0f;
 
+    private bool isAttack;
+
+    //突進攻撃の経過時間
+    private float attackElapsedTime;
+    //突進攻撃のスピード
+    [SerializeField]
+    private float chargeSpeed = 5.0f;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
 
         SetState(EnemyState.Idle);
-
-        //StartCoroutine("AttackTest");
-
-
+        isAttack = false;
+        attackElapsedTime = 0.0f;
     }
 
     // Update is called once per frame
@@ -69,12 +75,24 @@ public class TigerEnenmy : EnemyBase
         {
             if (workingAttackCoroutine == null)
             {
-                 Attack();
+                Attack();
+            }
+            else
+            {
+                //突進する
+                transform.position += transform.forward * chargeSpeed * Time.deltaTime;
+                attackElapsedTime += Time.deltaTime;
+
+                //所定時間突進したら
+                if(attackElapsedTime >= 0.75f)
+                {
+                    isAttack = false;
+                    workingAttackCoroutine = null;
+                    SetState(EnemyState.Idle);
+                }
             }
 
         }
-
-
     }
 
     public override void Attack()
@@ -85,7 +103,7 @@ public class TigerEnenmy : EnemyBase
         {
             workingAttackCoroutine = StartCoroutine("AttackCoroutine");
         }
-            
+
     }
 
     public override void PossessionAttack()
@@ -112,19 +130,9 @@ public class TigerEnenmy : EnemyBase
     {
         yield return new WaitForSeconds(0.6f);
 
-        EnableAttackCollider();
+        isAttack = true;
 
-        PlayAttackEffect(attackCollider.gameObject);
-
-        yield return new WaitForSeconds(0.2f);
-
-        DisableAttackCollider();
-
-        yield return new WaitForSeconds(1.0f);
-
-        workingAttackCoroutine = null;
-
-        SetState(EnemyState.Chase, targetTransform);
+        attackElapsedTime = 0.0f;
     }
 
     private IEnumerator PossessionAttackCoroutine()
@@ -193,5 +201,35 @@ public class TigerEnenmy : EnemyBase
         {
             stanAttackCollider.enabled = false;
         }
+    }
+
+    public bool GetIsAttack()
+    {
+        return isAttack;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(state != EnemyState.Possession)
+        {
+            if (isAttack)
+            {
+                if (collision.transform.tag == "Player")
+                {
+                    player.TakeDamage(damage);
+                }
+            }
+        }
+        else
+        {
+            if (isAttack)
+            {
+                if (collision.transform.tag == "Enemy")
+                {
+                    collision.transform.GetComponent<EnemyBase>().TakeDamage(damage);
+                }
+            }
+        }
+        
     }
 }

@@ -61,6 +61,10 @@ public class EnemyBase : MonoBehaviour
     //EnemyHPゲージ
     protected EnemyGage enemyGage;
 
+    //憑依したとき敵の後ろにプレイヤーがくっつく
+    //その敵とプレイヤーの距離
+    [SerializeField]
+    private float possessionPlayerDistance;
 
     protected virtual void Awake()
     {
@@ -188,6 +192,11 @@ public class EnemyBase : MonoBehaviour
         ParticleSystem hitEffect = hitEffectObj.GetComponent<ParticleSystem>();
         hitEffect.Play();
 
+    }
+
+    public float GetPossessionPlayerDistance()
+    {
+        return possessionPlayerDistance;
     }
 
 }
