@@ -127,6 +127,7 @@ MonoBehaviour:
   player: {fileID: 0}
   state: 0
   hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
+  possessionPlayerDistance: 1.5
   attackCollider: {fileID: 3949722044833592965}
   stanAttackCollider: {fileID: 0}
   attackRange: 3
@@ -156,7 +157,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!1 &7490853807082493599
 GameObject:
