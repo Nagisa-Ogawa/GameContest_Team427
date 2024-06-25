@@ -262,6 +262,7 @@ MonoBehaviour:
   player: {fileID: 0}
   state: 0
   hitEffectObj: {fileID: 0}
+  possessionPlayerDistance: 2
   attackCollider: {fileID: 923039372756691483}
   stanAttackCollider: {fileID: 144540385328836664}
   attackRange: 3

@@ -75,11 +75,11 @@ public class Possession : IState
         }
 
         //player.Rb.velocity = velocity;
-        possEnemy.GetComponent<Rigidbody>().velocity = velocity;
+        //possEnemy.GetComponent<Rigidbody>().velocity = velocity;
+        possEnemy.transform.position += velocity * Time.deltaTime;
 
-
-
-        player.transform.position = player.GetPossessionEnemy().transform.position - player.GetPossessionEnemy().transform.forward * 1.5f + player.transform.up * 1.0f;
+        //プレイヤーの位置を憑依した敵の後ろにくっつける
+        player.transform.position = UpdatePossessionPlayerPosition();
 
         if (player.PlayerInput.currentActionMap["PossessionCancel"].IsPressed())
         {
@@ -111,4 +111,18 @@ public class Possession : IState
         possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
     }
 
+    Vector3 UpdatePossessionPlayerPosition()
+    {
+        Vector3 position;
+
+        //憑依している敵の位置
+        position = player.GetPossessionEnemy().transform.position;
+        //敵の後ろ方向に指定距離離す
+        position -= player.GetPossessionEnemy().transform.forward * possEnemy.GetComponent<EnemyBase>().GetPossessionPlayerDistance();
+        //地面にめり込むため少し上方向に離す
+        position += player.GetPossessionEnemy().transform.up * 1.0f;
+
+        return position;
+    }
 }
+

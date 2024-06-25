@@ -77,7 +77,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 0
+  hp: 0
   maxStanPoint: 0
+  stanPoint: 0
   damage: 0
   stanDamage: 0
   moveSpeed: 0
@@ -85,6 +87,7 @@ MonoBehaviour:
   player: {fileID: 0}
   state: 0
   hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
+  possessionPlayerDistance: 1.5
   attackCollider: {fileID: 0}
   stanAttackCollider: {fileID: 0}
   attackRange: 0.8
