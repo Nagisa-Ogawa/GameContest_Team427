@@ -131,12 +131,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 999
+  hp: 0
   maxStanPoint: 16
   possessionTargetEnemy: {fileID: 0}
   possessionDistance: 10
+  rb: {fileID: 0}
   speed: 5
   hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
   stanHitEffectObj: {fileID: 5081134170703874692, guid: cc35d024673beb1409095dae4fcc469e, type: 3}
+  slashEffectObj: {fileID: 4210485791932858974, guid: ba02f6a8eb6671d4eb9ddd2ab25dde79, type: 3}
+  playerArmObj: {fileID: 4418434934547899638}
 --- !u!1 &1320576841380536113
 GameObject:
   m_ObjectHideFlags: 0

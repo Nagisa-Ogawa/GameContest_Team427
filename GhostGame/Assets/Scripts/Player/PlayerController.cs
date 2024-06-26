@@ -67,6 +67,15 @@ public class PlayerController : MonoBehaviour
         private set { stanHitEffectObj = value; }
     }
 
+    // 斬撃のエフェクト
+    [SerializeField]
+    private GameObject slashEffectObj = null;
+    public GameObject SlashEffectObj
+    {
+        get { return slashEffectObj; }
+        private set { slashEffectObj = value; }
+    }
+
     private StanAllowUIManager stanAllowUIManager = null;
 
     // プレイヤーインプット
