@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class LightAttack : IState
 {
@@ -91,6 +92,10 @@ public class LightAttack : IState
         Coroutine coroutine = player.StartCoroutine(MoveToEnemy());
         yield return coroutine;
         coroutine = player.StartCoroutine(MoveArm());
+        // 斬撃エフェクトを作成
+        GameObject slashEffctObj = GameObject.Instantiate(player.SlashEffectObj,player.transform);
+        VisualEffect slashEffect = slashEffctObj.GetComponentInChildren<VisualEffect>();
+        slashEffect.Play();
         yield return coroutine;
         if (target == null)
             yield break;
