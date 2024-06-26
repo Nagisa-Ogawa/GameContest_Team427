@@ -66,6 +66,12 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     private float possessionPlayerDistance;
 
+    //EnemyStanゲージ
+    protected EnemyStanGage enemyStanGage;
+
+    //EnemeyUIOnOff
+    protected EnemyUIOnOff enemyUIOnOff;
+
     protected virtual void Awake()
     {
         hp = maxHp;
@@ -77,8 +83,18 @@ public class EnemyBase : MonoBehaviour
     protected virtual void Start()
     {
         //Objectを取得  自分の子供のEnemyGageのみを取得
-        enemyGage = transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
+        enemyGage = transform.Find("EnemyHP_Stan").transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
         enemyGage.SetEnemy(this);
+
+
+        //StanUI用
+        enemyStanGage = transform.Find("EnemyHP_Stan").transform.Find("EnemyHPUI").transform.Find("EnemyGage").transform.Find("EnemyStanGage").GetComponent<EnemyStanGage>();
+        enemyStanGage.SetStanEnemy(this);
+
+        //UIOnOff用
+        enemyUIOnOff = transform.Find("EnemyHP_Stan").GetComponent<EnemyUIOnOff>();
+        enemyUIOnOff.SetUIEnemy(this);
+
 
     }
 
@@ -105,6 +121,7 @@ public class EnemyBase : MonoBehaviour
 
                 //idleに戻す
                 SetState(EnemyState.Idle);
+                enemyStanGage.GageGain();
             }
         }
     }
@@ -122,6 +139,8 @@ public class EnemyBase : MonoBehaviour
 
     public void TakeStanDamage(int stanDamage)
     {
+        enemyStanGage.GageReduction(stanDamage);
+
         stanPoint -= stanDamage;
         if(stanPoint <= 0)
         {
@@ -130,7 +149,7 @@ public class EnemyBase : MonoBehaviour
             // 動いているコルーチンがあるなら停止
             StopWorkingCoroutine();
             // スタン値をリセット
-            stanPoint = maxStanPoint;
+            //stanPoint = maxStanPoint;
             // 色を青くする
             //GameObject model = transform.GetComponentInChildren<MeshRenderer>().material;
             Material mat = transform.GetComponentInChildren<MeshRenderer>().material;
