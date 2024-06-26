@@ -61,6 +61,12 @@ public class EnemyBase : MonoBehaviour
     //EnemyHPゲージ
     protected EnemyGage enemyGage;
 
+    //EnemyStanゲージ
+    protected EnemyStanGage enemyStanGage;
+
+    //EnemeyUIOnOff
+    protected EnemyUIOnOff enemyUIOnOff;
+
 
     protected virtual void Awake()
     {
@@ -72,9 +78,18 @@ public class EnemyBase : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        //Objectを取得  自分の子供のEnemyGageのみを取得
-        enemyGage = transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
+        //Objectを取得  自分の子供のEnemyGageのみを取得 HPUI用
+        enemyGage = transform.Find("EnemyHP_Stan").transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
         enemyGage.SetEnemy(this);
+
+        //StanUI用
+        enemyStanGage = transform.Find("EnemyHP_Stan").transform.Find("EnemyHPUI").transform.Find("EnemyGage").transform.Find("EnemyStanGage").GetComponent<EnemyStanGage>();
+        enemyStanGage.SetStanEnemy(this);
+
+        //UIOnOff用
+        enemyUIOnOff = transform.Find("EnemyHP_Stan").GetComponent<EnemyUIOnOff>();
+        enemyUIOnOff.SetUIEnemy(this);
+
 
     }
 
@@ -101,6 +116,7 @@ public class EnemyBase : MonoBehaviour
 
                 //idleに戻す
                 SetState(EnemyState.Idle);
+                enemyStanGage.GageGain();
             }
         }
     }
@@ -108,7 +124,7 @@ public class EnemyBase : MonoBehaviour
     public void TakeDamage(int damage)
     {
         enemyGage.GageReduction(damage);
-
+        
         hp -= damage;
         if(hp <= 0)
         {
@@ -118,6 +134,8 @@ public class EnemyBase : MonoBehaviour
 
     public void TakeStanDamage(int stanDamage)
     {
+        enemyStanGage.GageReduction(stanDamage);
+
         stanPoint -= stanDamage;
         if(stanPoint <= 0)
         {
@@ -126,7 +144,7 @@ public class EnemyBase : MonoBehaviour
             // 動いているコルーチンがあるなら停止
             StopWorkingCoroutine();
             // スタン値をリセット
-            stanPoint = maxStanPoint;
+            //stanPoint = maxStanPoint;
             // 色を青くする
             GameObject model = transform.Find("Mouse/default").gameObject;
             Material mat = model.GetComponent<MeshRenderer>().material;
