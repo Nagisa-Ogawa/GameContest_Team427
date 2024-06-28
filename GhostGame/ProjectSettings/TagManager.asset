@@ -9,6 +9,7 @@ TagManager:
   - PlayerStanArea
   - PlayerArm
   - MeshColor
+  - StageManager
   layers:
   - Default
   - TransparentFX

@@ -66,6 +66,10 @@ public class EnemyBase : MonoBehaviour
     [SerializeField]
     private float possessionPlayerDistance;
 
+    //ステージの管理変数
+    //次ステージへ進めるかどうかなど
+    private StageManager sm;
+
     protected virtual void Awake()
     {
         hp = maxHp;
@@ -80,6 +84,7 @@ public class EnemyBase : MonoBehaviour
         enemyGage = transform.Find("EnemyHPUI").transform.Find("EnemyGage").GetComponent<EnemyGage>();
         enemyGage.SetEnemy(this);
 
+        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
     }
 
     // Update is called once per frame
@@ -117,6 +122,7 @@ public class EnemyBase : MonoBehaviour
         if(hp <= 0)
         {
             gameObject.SetActive(false);
+            sm.EnemyDefeated();
         }
     }
 
