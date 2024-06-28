@@ -7,6 +7,8 @@ public class EnemyUIOnOff : MonoBehaviour
     public GameObject obj;
     private EnemyBase enemy;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +18,7 @@ public class EnemyUIOnOff : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (enemy.hp < enemy.maxHp)
+        if(enemy.hp < enemy.maxHp)
         {
             obj.SetActive(true);
 
