@@ -72,6 +72,10 @@ public class EnemyBase : MonoBehaviour
     //EnemeyUIOnOff
     protected EnemyUIOnOff enemyUIOnOff;
 
+    //ステージ管理変数
+    //次のステージに進める状態かどうかなど
+    private StageManager sm;
+
     protected virtual void Awake()
     {
         hp = maxHp;
@@ -95,7 +99,7 @@ public class EnemyBase : MonoBehaviour
         enemyUIOnOff = transform.Find("EnemyHP_Stan").GetComponent<EnemyUIOnOff>();
         enemyUIOnOff.SetUIEnemy(this);
 
-
+        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
     }
 
     // Update is called once per frame
@@ -134,6 +138,7 @@ public class EnemyBase : MonoBehaviour
         if(hp <= 0)
         {
             gameObject.SetActive(false);
+            sm.EnemyDefeated();
         }
     }
 

@@ -38,7 +38,6 @@ public class StageManager : MonoBehaviour
         // “G‚ª‘S–Å‚µ‚½‚ç”à‚ðŠJ‚­
         if (enemiesRemaining <= 0)
         {
-            Debug.Log("door open");
             isOpen = true;
         }
     }
