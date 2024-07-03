@@ -38,7 +38,7 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        waveNum = 3;
+        waveNum = 0;
 
         for (int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
         {
