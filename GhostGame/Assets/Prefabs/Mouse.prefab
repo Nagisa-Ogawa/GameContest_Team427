@@ -235,7 +235,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
@@ -578,6 +578,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6833729939142561810, guid: 65e1107e992f666468c521f8512bede6, type: 3}
   m_PrefabInstance: {fileID: 8581422625697084531}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5776369625472490468 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2827873505843376023, guid: 65e1107e992f666468c521f8512bede6, type: 3}
+  m_PrefabInstance: {fileID: 8581422625697084531}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7519305647722421772 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2255923861184440959, guid: 65e1107e992f666468c521f8512bede6, type: 3}
@@ -595,7 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8beaaada047f99b439855e1282a34c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obj: {fileID: 7519305647722421772}
+  obj: {fileID: 5776369625472490468}
 --- !u!1001 &9013955339105216687
 PrefabInstance:
   m_ObjectHideFlags: 0
