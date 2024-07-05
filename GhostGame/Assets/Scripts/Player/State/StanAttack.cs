@@ -30,6 +30,7 @@ public class StanAttack : IState
         this.player = player;
         areaObj = GameObject.FindWithTag("PlayerStanArea");
         areaModelObj = areaObj.transform.GetChild(0).gameObject;
+        lastAttackTime = Time.time - stanAttackCD;
     }
 
     public void Enter()
