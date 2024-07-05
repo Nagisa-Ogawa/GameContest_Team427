@@ -47,6 +47,7 @@ public class Possession : IState
         {
             player.GetComponent<PlayerController>().Change(player.idle);
             player.GetComponent<PlayerController>().ResetPossessionEnemy();
+            player.GetComponent<CapsuleCollider>().isTrigger = false;
             return;
         }
 
@@ -56,12 +57,14 @@ public class Possession : IState
         if(possEnemy.GetComponent<EnemyBase>().GetWorkingAttackCoroutine() == null)
         {
             moveInput = player.PlayerInput.currentActionMap["Move"].ReadValue<Vector2>();
+
+            // カメラから見た左右と前後の入力値を受け取る
+            velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
+            velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
+            velocity = velocity.normalized * player.Speed;
         }
         
-        // カメラから見た左右と前後の入力値を受け取る
-        velocity += moveInput.x * new Vector3(camera.transform.right.x, 0.0f, camera.transform.right.z).normalized;
-        velocity += moveInput.y * new Vector3(camera.transform.forward.x, 0.0f, camera.transform.forward.z).normalized;
-        velocity = velocity.normalized * player.Speed;
+
         if (velocity != Vector3.zero)
         {
             // プレイヤーの向きを移動方向へ向かせる

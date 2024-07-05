@@ -37,7 +37,13 @@ public class Move : IState
         if(velocity!=Vector3.zero)
         {
             // プレイヤーの向きを移動方向へ向かせる
-            player.transform.forward = velocity.normalized;
+            //player.transform.forward = velocity.normalized;
+
+            // プレイヤーの向きを移動方向へ向かせるためのターゲット回転を計算
+            Quaternion targetRotation = Quaternion.LookRotation(velocity.normalized);
+            // プレイヤーの現在の回転をターゲット回転にスムーズに補間
+            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, targetRotation, Time.deltaTime * 10.0f);
+
             // 移動フラグをON
             ISmove = true;
         }

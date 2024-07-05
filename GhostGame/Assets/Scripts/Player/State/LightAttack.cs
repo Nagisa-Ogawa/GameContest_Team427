@@ -26,6 +26,8 @@ public class LightAttack : IState
         this.player = player;
         rb=player.GetComponent<Rigidbody>();
         armObj = GameObject.FindWithTag("PlayerArm");
+        //リキャストリセット
+        lastAttackTime = Time.time - lightAttackCD;
     }
 
     public void Enter()
