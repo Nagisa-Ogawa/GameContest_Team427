@@ -88,6 +88,7 @@ MonoBehaviour:
   state: 0
   hitEffectObj: {fileID: 5177585504564219855, guid: c2ebf93c32fdbbb4d9fc428c233d0af6, type: 3}
   possessionPlayerDistance: 1.5
+  damageUI: {fileID: 7655956814956858437, guid: 9bbabb283ab8e19458b1fcf3517e0853, type: 3}
   attackCollider: {fileID: 0}
   stanAttackCollider: {fileID: 0}
   attackRange: 0.8
