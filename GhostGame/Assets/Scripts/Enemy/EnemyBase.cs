@@ -76,6 +76,7 @@ public class EnemyBase : MonoBehaviour
     //次のステージに進める状態かどうかなど
     private StageManager sm;
 
+    public GameObject damageUI;
     protected virtual void Awake()
     {
         hp = maxHp;
@@ -135,7 +136,12 @@ public class EnemyBase : MonoBehaviour
         enemyGage.GageReduction(damage);
 
         hp -= damage;
-        if(hp <= 0)
+
+        GameObject damagetext = Instantiate(damageUI, transform.position - Camera.main.transform.forward * 0.2f, Quaternion.identity);
+        damagetext.GetComponent<DamageUI>().Init();
+        damagetext.GetComponent<DamageUI>().TextChange(damage.ToString());
+
+        if (hp <= 0)
         {
             gameObject.SetActive(false);
             sm.EnemyDefeated();
