@@ -37,7 +37,7 @@ public class Title : MonoBehaviour
     private void GameStart()
     {
         //ƒQ[ƒ€ƒV[ƒ“‚Ö‘JˆÚ
-        SceneManager.LoadScene("PlayerTestScene");
+        SceneManager.LoadScene("Stage1");
     }
     private void Option()
     {
