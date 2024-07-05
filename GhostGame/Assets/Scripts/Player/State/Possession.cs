@@ -16,11 +16,14 @@ public class Possession : IState
     public Vector3 velocity;
     GameObject possEnemy = null;
 
+    private StageManager sm;
 
     public Possession(PlayerController player)
     {
         this.player = player;
         rb=player.GetComponent<Rigidbody>();
+        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
+
     }
 
     public void Enter()
@@ -38,6 +41,8 @@ public class Possession : IState
         StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
         stanAllowUIManager.DeleteEnemyList(possEnemy);
 
+        //憑依したら敵の数カウントを1減らす
+        sm.EnemyPossession();
     }
 
     public void Update()
@@ -112,6 +117,10 @@ public class Possession : IState
         possEnemy.GetComponent<Rigidbody>().angularDrag = 100;
         // 憑依から解放する
         possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
+
+        //憑依から解放したら敵の数カウントを1増やす
+        sm.EnemyPossessionCancel();
+        Debug.Log("possessioncancel");
     }
 
     Vector3 UpdatePossessionPlayerPosition()

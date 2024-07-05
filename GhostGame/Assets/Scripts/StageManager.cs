@@ -90,10 +90,14 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    // 扉を開く関数
-    void OpenDoor()
+    public void EnemyPossession()
     {
-        
+        enemiesRemaining--;
+    }
+
+    public void EnemyPossessionCancel()
+    {
+        enemiesRemaining++;
     }
 
     // 次のステージへ進む関数
