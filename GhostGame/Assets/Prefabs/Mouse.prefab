@@ -263,6 +263,7 @@ MonoBehaviour:
   state: 0
   hitEffectObj: {fileID: 0}
   possessionPlayerDistance: 2
+  sSensor: {fileID: 3454807169273548567}
   damageUI: {fileID: 7655956814956858437, guid: 9bbabb283ab8e19458b1fcf3517e0853, type: 3}
   attackCollider: {fileID: 923039372756691483}
   stanAttackCollider: {fileID: 144540385328836664}

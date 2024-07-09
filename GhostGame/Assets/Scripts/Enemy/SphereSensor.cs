@@ -6,8 +6,6 @@ using UnityEditor;
 
 public class SphereSensor : MonoBehaviour
 {
-    private EnemyBase enemy;
-
     //プレイヤーが感知範囲外にいる時間
     //一定時間以上感知範囲外にいた場合、追跡状態をやめる
     private float outSensorTime  = 0;
@@ -15,21 +13,24 @@ public class SphereSensor : MonoBehaviour
     [SerializeField]
     private float chaseEndTime = 5.0f;
 
+    //感知範囲内に入っているか
+    private bool isEnter;
+
     // Start is called before the first frame update
     void Start()
     {
-        enemy = transform.parent.GetComponent<EnemyBase>();
+        isEnter = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (enemy.GetState() == EnemyBase.EnemyState.Chase)
+        if (isEnter)
         {
             outSensorTime += Time.deltaTime;
             if (outSensorTime >= chaseEndTime)
             {
-                enemy.SetState(EnemyBase.EnemyState.Idle);
+                isEnter = false;
             }
         }
     }
@@ -41,38 +42,12 @@ public class SphereSensor : MonoBehaviour
 
     private void OnTriggerStay(Collider target)
     {
-
-        if(target.gameObject.tag == "Player")
-        {
-            //攻撃状態または硬直状態じゃなければ更新
-            if (enemy.GetState() != EnemyBase.EnemyState.Freeze && enemy.GetState() != EnemyBase.EnemyState.Attack && enemy.GetState() != EnemyBase.EnemyState.Possession)
-            {
-                //プレイヤーが憑依しているエネミーがいるなら
-                if(target.GetComponent<PlayerController>().GetPossessionEnemy() != null)
-                {
-                    //PossessionEnemyのTransformをターゲットに入れる
-                    enemy.SetState(EnemyBase.EnemyState.Chase, target.GetComponent<PlayerController>().GetPossessionEnemy().transform);
-                }
-                else
-                {
-                    //いないならPlayerのTransformをターゲットに入れる
-                    enemy.SetState(EnemyBase.EnemyState.Chase, target.transform);
-                }
-            }
-
-            ResetOutSensorTime();
-        }
+        isEnter = true;
     }
 
+    public bool GetIsEnter()
+    {
+        return isEnter;
+    }
     
-
-//#if UNITY_EDITOR
-//    //　サーチする角度表示
-//    private void OnDrawGizmos()
-//    {
-//        Handles.color = Color.red;
-//        Handles.DrawSolidArc(transform.position, Vector3.up, Quaternion.Euler(0f, -searchAngle, 0f) * transform.forward, searchAngle * 2f, searchArea.radius);
-//    }
-//#endif
-
 }

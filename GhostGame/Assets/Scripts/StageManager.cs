@@ -65,11 +65,17 @@ public class StageManager : MonoBehaviour
     {
         enemiesRemaining--;
 
-        // 敵が全滅したら扉を開く
+        CheckWave();
+    }
+
+    //ウェーブが進むかどうか確認する関数
+    void CheckWave()
+    {
+        // 敵が全滅したら
         if (enemiesRemaining <= 0)
         {
-            //現在のウェーブが最終ウェーブだったら
-            if(waveNum == waveList.Length - 1)
+            //現在のウェーブが最終ウェーブだったら扉を開く
+            if (waveNum == waveList.Length - 1)
             {
                 isOpen = true;
             }
@@ -78,7 +84,7 @@ public class StageManager : MonoBehaviour
                 //違ったら次のウェーブをスポーンさせる
                 waveNum++;
 
-                for(int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
+                for (int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
                 {
                     WaveEnemy spawnEnemy = waveList[waveNum].waveEnemy[i];
                     Instantiate(spawnEnemy.enemyPrefab, spawnEnemy.spawnPosition, Quaternion.identity);
@@ -86,18 +92,22 @@ public class StageManager : MonoBehaviour
                     enemiesRemaining++;
                 }
             }
-            
+
         }
     }
 
     public void EnemyPossession()
     {
         enemiesRemaining--;
+
+        CheckWave();
     }
 
     public void EnemyPossessionCancel()
     {
         enemiesRemaining++;
+
+        CheckWave();
     }
 
     // 次のステージへ進む関数
