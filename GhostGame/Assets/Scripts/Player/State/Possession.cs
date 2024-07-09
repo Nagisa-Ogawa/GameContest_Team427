@@ -40,7 +40,7 @@ public class Possession : IState
         mat.color = possEnemy.GetComponent<EnemyBase>().NormalColor;
         StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
         stanAllowUIManager.DeleteEnemyList(possEnemy);
-
+        player.possessionTargetEnemy = null;
         //œßˆË‚µ‚½‚ç“G‚Ì”ƒJƒEƒ“ƒg‚ğ1Œ¸‚ç‚·
         sm.EnemyPossession();
     }

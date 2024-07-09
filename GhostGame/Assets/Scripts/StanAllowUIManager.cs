@@ -110,6 +110,9 @@ public class StanAllowUIManager : MonoBehaviour
         }
         HideAllowUI(stanAllowUI);
         stanAllowUIList.Remove(stanAllowUI);
+
+        //プレイヤーの取りつき対象から除外
+        playerObj.GetComponent<PlayerController>().possessionTargetEnemy = null;
     }
 
     public void NextListEnemy()
