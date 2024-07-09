@@ -29,6 +29,8 @@ public class TigerEnenmy : EnemyBase
     // Update is called once per frame
     protected override void Update()
     {
+        base.Update();
+
         if (state == EnemyState.Chase)
         {
             if (targetTransform == null)
