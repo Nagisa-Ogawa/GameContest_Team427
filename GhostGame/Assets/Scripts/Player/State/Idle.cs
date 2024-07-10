@@ -28,11 +28,11 @@ public class Idle :IState
         {
             player.Change(player.move);
         }
-        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
-        if (isLightAttack)
-        {
-            player.Change(player.lightAttack);
-        }
+        //isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
+        //if (isLightAttack)
+        //{
+        //    player.Change(player.lightAttack);
+        //}
         isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame();
         if (isStanAttack)
         {

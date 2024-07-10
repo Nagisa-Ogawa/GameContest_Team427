@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class LightAttack : IState
+public class PossessionLightAttack : IState
 {
     private PlayerController player;
     private Rigidbody rb;
     GameObject target = null;
     int lightAttackDamage = 5;      // 弱攻撃のダメージ数
     float lightAttackCD = 2.0f;     // 弱攻撃のクールダウン
-    float lightAttackRadius = 3.0f; // 弱攻撃の敵を捕捉する球体の半径
+    float lightAttackRadius = 4.0f; // 弱攻撃の敵を捕捉する球体の半径
     float lightAttackOffset = 3.0f; // 接近して弱攻撃する際の敵との距離オフセット
-    float moveSpeed = 7.0f; // 敵に接近する際の速度
+    float moveSpeed = 5.0f; // 敵に接近する際の速度
     float lastAttackTime = 0.0f;
+    GameObject possEnemy = null;
 
     // コンボ用
     int maxComboCount = 3;
@@ -22,27 +24,22 @@ public class LightAttack : IState
     float comboDuration = 1.5f;     // コンボの継続時間
     float comboCD = 0.15f;
 
-    // デバック用腕アニメーション
-    GameObject armObj = null;
-    Vector3 startAngle = Vector3.zero;
-    float rotatePower = 1.0f;
-    float totalRotate = 0;
-    public LightAttack(PlayerController player)
+    public PossessionLightAttack(PlayerController player)
     {
         this.player = player;
         rb=player.GetComponent<Rigidbody>();
-        armObj = GameObject.FindWithTag("PlayerArm");
         //リキャストリセット
         lastAttackTime = Time.time - lightAttackCD;
     }
 
     public void Enter()
     {
+        possEnemy = player.possessionEnemy;
         // 周囲に攻撃が届く敵がいるかチェック
         if (!SearchEnemy())
         {
             // いないなら攻撃をやめる
-            player.Change(player.idle);
+            player.Change(player.possession);
             return;
         }
         float deltaTime = Time.time - lastAttackTime;
@@ -71,7 +68,7 @@ public class LightAttack : IState
         if (deltaTime <= lightAttackCD)
         {
             // いないなら攻撃をやめる
-            player.Change(player.idle);
+            player.Change(player.possession);
             return;
         }
         else
@@ -84,7 +81,8 @@ public class LightAttack : IState
 
     public void Update()
     {
-
+        //プレイヤーの位置を憑依した敵の後ろにくっつける
+        player.transform.position = UpdatePossessionPlayerPosition();
     }
 
     public void Exit()
@@ -95,17 +93,29 @@ public class LightAttack : IState
     bool SearchEnemy()
     {
         // 範囲内にいる敵を全て取得
-        var enemies = Physics.OverlapSphere(player.transform.position, lightAttackRadius).Where(coll => coll.tag == "Enemy");
-        if (enemies.Count() == 0)
+        var enemies = Physics.OverlapSphere(possEnemy.transform.position, lightAttackRadius).Where(coll => coll.tag == "Enemy");
+        if (enemies.Count() <= 1)
         {
             target = null;
             return false;
         }
-        // Debug.Log("enemy : "+enemies.Count());
         float minDistance = 999.0f;
+        Transform enemyChild = null;
+        for(int i=0;i<possEnemy.transform.childCount;i++)
+        {
+            var child=possEnemy.transform.GetChild(i);
+            if (child.tag == "Enemy")
+            {
+                enemyChild = child; ;
+            }
+        }
         // 一番近い敵をターゲットに
         foreach (var enemy in enemies)
         {
+            if(enemy.gameObject==enemyChild.gameObject)
+            {
+                continue;
+            }
             float distance = (enemy.transform.position - player.transform.position).magnitude;
             if (minDistance>=distance)
             {
@@ -118,17 +128,18 @@ public class LightAttack : IState
 
     IEnumerator Attack()
     {
-        Debug.Log("攻撃" + nowComboCount + "番目");
         // 攻撃をする敵へ接近
         Coroutine coroutine = player.StartCoroutine(MoveToEnemy());
         yield return coroutine;
         //coroutine = player.StartCoroutine(MoveArm());
         // 斬撃エフェクトを作成
-        GameObject slashEffctObj = GameObject.Instantiate(player.SlashEffectObj,player.transform);
-        Slash slash=slashEffctObj.GetComponent<Slash>();
+        // GameObject slashEffctObj = GameObject.Instantiate(player.SlashEffectObj,possEnemy.transform);
+        GameObject slashEffectObj = GameObject.FindWithTag("SlashEffect").gameObject;
+        slashEffectObj.transform.position=possEnemy.transform.position;
+        Slash slash=slashEffectObj.GetComponent<Slash>();
         // コンボ数に応じて斬撃エフェクトの角度を変更
-        slashEffctObj.transform.eulerAngles = player.transform.eulerAngles + slash.comboSlashRot[nowComboCount];
-        VisualEffect slashEffect = slashEffctObj.GetComponentInChildren<VisualEffect>();
+        slashEffectObj.transform.GetChild(0).transform.eulerAngles = possEnemy.transform.eulerAngles + slash.comboSlashRot[nowComboCount];
+        VisualEffect slashEffect = slashEffectObj.GetComponentInChildren<VisualEffect>();
         slashEffect.Play();
         // yield return coroutine;
         if (target == null)
@@ -151,46 +162,41 @@ public class LightAttack : IState
             nowComboCount = 0;
         }
         // 攻撃を終了
-        player.Change(player.idle);
+        player.Change(player.possession);
         yield return null;
     }
 
     IEnumerator MoveToEnemy()
     {
-        Vector3 dir = target.transform.position - player.transform.position;
+        Vector3 dir = target.transform.position - possEnemy.transform.position;
         dir.y = 0.0f;
-        rb.velocity = dir.normalized * moveSpeed;
-        player.transform.forward = dir.normalized;
+        possEnemy.transform.forward = dir.normalized;
         while (true)
         {
-            float distance = (target.transform.position - player.transform.position).magnitude;
+            possEnemy.transform.position += dir.normalized * moveSpeed * Time.deltaTime;
+            float distance = (target.transform.position - possEnemy.transform.position).magnitude;
             if (distance <= lightAttackOffset)
             {
-                rb.velocity = Vector3.zero;
                 yield break;
             }
             yield return null;
         }
     }
 
-    IEnumerator MoveArm()
+    Vector3 UpdatePossessionPlayerPosition()
     {
-        startAngle = armObj.transform.localEulerAngles;
-        while (true)
-        {
-            Vector3 angle = armObj.transform.localEulerAngles;
-            angle.x += rotatePower;
-            angle.y -= rotatePower;
-            armObj.transform.localEulerAngles = angle;
-            totalRotate += rotatePower;
-            if (totalRotate > 120.0f)
-            {
-                armObj.transform.localEulerAngles = startAngle;
-                totalRotate = 0.0f;
-                yield break;
-            }
-            yield return null;
-        }
+        Vector3 position;
+
+        //憑依している敵の位置
+        position = player.GetPossessionEnemy().transform.position;
+        //敵の後ろ方向に指定距離離す
+        position -= player.GetPossessionEnemy().transform.forward * possEnemy.GetComponent<EnemyBase>().GetPossessionPlayerDistance();
+        //地面にめり込むため少し上方向に離す
+        position += player.GetPossessionEnemy().transform.up * 1.0f;
+
+        return position;
     }
+
+
 }
 

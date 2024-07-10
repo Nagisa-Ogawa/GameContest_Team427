@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
         
     public Idle idle;
     public Move move;
-    public LightAttack lightAttack;
+    public PossessionLightAttack lightAttack;
     public StanAttack stanAttack;
     protected PlayerGage playerGage;
     public Possession possession;
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     bool isStan;
 
     //今憑依しているエネミー
-    private GameObject possessionEnemy = null;
+    public GameObject possessionEnemy = null;
     //憑依対象になっているエネミー
     public GameObject possessionTargetEnemy = null;
 
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         idle = new Idle(this);
         move = new Move(this);
-        lightAttack = new LightAttack(this);
+        lightAttack = new PossessionLightAttack(this);
         stanAttack= new StanAttack(this);
 
         possession = new Possession(this);
