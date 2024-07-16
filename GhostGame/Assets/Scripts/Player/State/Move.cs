@@ -49,11 +49,11 @@ public class Move : IState
         }
         rb.velocity = velocity;
 
-        isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
-        if (isLightAttack)
-        {
-            player.Change(player.lightAttack);
-        }
+        //isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
+        //if (isLightAttack)
+        //{
+        //    player.Change(player.lightAttack);
+        //}
         isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame();
         if (isStanAttack)
         {

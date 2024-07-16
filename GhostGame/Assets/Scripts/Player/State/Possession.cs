@@ -10,6 +10,7 @@ public class Possession : IState
     private PlayerController player;
     private Camera camera;
     Vector2 moveInput = Vector2.zero;
+    bool isAttack = false;
 
     Rigidbody rb;
 
@@ -50,8 +51,8 @@ public class Possession : IState
         //憑依しているエネミーが非アクティブだったら(倒されたら)
         if(possEnemy.activeInHierarchy == false)
         {
-            player.GetComponent<PlayerController>().Change(player.idle);
-            player.GetComponent<PlayerController>().ResetPossessionEnemy();
+            player.Change(player.idle);
+            player.ResetPossessionEnemy();
             player.GetComponent<CapsuleCollider>().isTrigger = false;
             return;
         }
@@ -95,15 +96,18 @@ public class Possession : IState
             player.ResetPossessionEnemy();
             player.GetComponent<CapsuleCollider>().isTrigger = false;
             player.Change(player.idle);
-            
-
         }
 
-        if (player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame())
+        if (player.PlayerInput.currentActionMap["PossessionAttack"].WasPressedThisFrame())
         {
             possEnemy.GetComponent<EnemyBase>().PossessionAttack();
         }
-
+        isAttack = false;
+        if (player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame())
+        {
+            isAttack = true;
+            player.Change(player.lightAttack);
+        }
         if (player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame())
         {
             possEnemy.GetComponent<EnemyBase>().PossessionStanAttack();
@@ -113,14 +117,21 @@ public class Possession : IState
 
     public void Exit()
     {
-        possEnemy.GetComponent<Rigidbody>().drag = 100;
-        possEnemy.GetComponent<Rigidbody>().angularDrag = 100;
-        // 憑依から解放する
-        possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
+        if(isAttack)
+        {
 
-        //憑依から解放したら敵の数カウントを1増やす
-        sm.EnemyPossessionCancel();
-        Debug.Log("possessioncancel");
+        }
+        else
+        {
+            possEnemy.GetComponent<Rigidbody>().drag = 100;
+            possEnemy.GetComponent<Rigidbody>().angularDrag = 100;
+            // 憑依から解放する
+            possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
+
+            //憑依から解放したら敵の数カウントを1増やす
+            sm.EnemyPossessionCancel();
+            Debug.Log("possessioncancel");
+        }
     }
 
     Vector3 UpdatePossessionPlayerPosition()

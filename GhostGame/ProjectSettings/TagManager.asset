@@ -10,6 +10,7 @@ TagManager:
   - PlayerArm
   - MeshColor
   - StageManager
+  - SlashEffect
   layers:
   - Default
   - TransparentFX
