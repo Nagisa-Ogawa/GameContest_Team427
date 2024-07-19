@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public IState currentState { get; private set; }
 
 [SerializeField]
-        
+     
     public Idle idle;
     public Move move;
     public PossessionLightAttack lightAttack;
@@ -38,9 +38,15 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb = null;
     public Rigidbody Rb
     {
-                get { return rb; }
+        get
+        {
+            if (rb == null)
+            {
+                rb = GetComponent<Rigidbody>(); // Rigidbody コンポーネントを自動で取得
+            }
+            return rb;
+        }
         private set { rb = value; }
-
     }
     // 移動速度
     [SerializeField]
@@ -48,8 +54,11 @@ public class PlayerController : MonoBehaviour
     public float Speed
     {
                 get { return speed; }
-        private set {speed = value; }
+         set {speed = value; }
     }
+
+   
+
     // 攻撃ヒット時のエフェクト
     [SerializeField]
     private GameObject hitEffectObj = null;
@@ -94,6 +103,8 @@ public class PlayerController : MonoBehaviour
         private set { playerArmObj = value; }
     }
 
+    private Vector3 moveDirection;// プレイヤーの現在の移動方向
+
 
     // Start is called before the first frame update
     void Start()
@@ -133,7 +144,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(currentState != null)
+        // 新しく追加されたコード: 移動方向の更新
+        Vector2 input = playerInput.currentActionMap["Move"].ReadValue<Vector2>();
+        moveDirection = new Vector3(input.x, 0, input.y).normalized;
+
+        if (currentState != null)
         {
             currentState.Update();
         }
@@ -161,6 +176,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   
 
     public void TakeDamage(int damage)
     {
