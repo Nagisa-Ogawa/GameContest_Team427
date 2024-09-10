@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Playables;
@@ -15,6 +16,8 @@ public class SpiderEnemy : EnemyBase
     float attackRange = 0.8f;
     [SerializeField]
     GameObject bullet;
+    public AudioClip sound1;
+    AudioSource audioSource;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -24,7 +27,8 @@ public class SpiderEnemy : EnemyBase
         SetState(EnemyState.Idle);
 
         //StartCoroutine("AttackTest");
-
+        //Component‚ðŽæ“¾
+        audioSource = GetComponent<AudioSource>();
 
     }
 
@@ -152,6 +156,9 @@ public class SpiderEnemy : EnemyBase
 
     private IEnumerator PossessionStanAttackCoroutine()
     {
+        
+        //‰¹(sound1)‚ð–Â‚ç‚·
+        audioSource.PlayOneShot(sound1);
         yield return new WaitForSeconds(0.5f);
         Vector3 pos = transform.position + transform.forward * 2.0f;
         GameObject go;
