@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class StageManager : MonoBehaviour
 {
+    PlayerController player;
+
     // 敵の数を管理する変数
     private int enemiesRemaining;
 
@@ -38,12 +40,15 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        waveNum = 0;
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+        waveNum = 2;
 
         for (int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
         {
             WaveEnemy spawnEnemy = waveList[waveNum].waveEnemy[i];
-            Instantiate(spawnEnemy.enemyPrefab, spawnEnemy.spawnPosition, Quaternion.identity);
+            GameObject go = Instantiate(spawnEnemy.enemyPrefab, spawnEnemy.spawnPosition, Quaternion.identity);
+            go.GetComponent<EnemyBase>().enemyPrefab = spawnEnemy.enemyPrefab;
 
             enemiesRemaining++;
         }
@@ -87,7 +92,8 @@ public class StageManager : MonoBehaviour
                 for (int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
                 {
                     WaveEnemy spawnEnemy = waveList[waveNum].waveEnemy[i];
-                    Instantiate(spawnEnemy.enemyPrefab, spawnEnemy.spawnPosition, Quaternion.identity);
+                    GameObject go = Instantiate(spawnEnemy.enemyPrefab, spawnEnemy.spawnPosition, Quaternion.identity);
+                    go.GetComponent<EnemyBase>().enemyPrefab = spawnEnemy.enemyPrefab;
 
                     enemiesRemaining++;
                 }
@@ -113,7 +119,17 @@ public class StageManager : MonoBehaviour
     // 次のステージへ進む関数
     public void NextStage()
     {
-        //ドアに近づきボタンを押したらこの関数を呼ぶ
+        //プレイヤー情報保存
+        GameManager.instance.playerHP = player.hp;
+        GameManager.instance.playerState = player.currentState;
+
+        if(player.GetPossessionEnemy() != null)
+        {
+            GameManager.instance.possessionEnemyPrefab = player.GetPossessionEnemy().GetComponent<EnemyBase>().enemyPrefab;
+            GameManager.instance.enemyHP = player.GetPossessionEnemy().GetComponent<EnemyBase>().hp;
+            GameManager.instance.enemyState = player.GetPossessionEnemy().GetComponent<EnemyBase>().GetState();
+            GameManager.instance.isMemory = true;
+        }
 
         SceneManager.LoadScene(nextSceneName);
     }
