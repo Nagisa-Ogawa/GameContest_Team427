@@ -122,8 +122,6 @@ public class EnemyBase : MonoBehaviour
     {
         if (state != EnemyState.Possession)
         {
-
-
             if (sSensor.GetIsEnter())
             {
                 //ƒvƒŒƒCƒ„[‚ª’ÇÕ”ÍˆÍ“à‚É“ü‚Á‚Ä‚¢‚½‚ç

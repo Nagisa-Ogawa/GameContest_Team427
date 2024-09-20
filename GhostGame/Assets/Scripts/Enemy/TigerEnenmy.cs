@@ -19,7 +19,6 @@ public class TigerEnenmy : EnemyBase
     {
         base.Start();
 
-        SetState(EnemyState.Idle);
 
         //StartCoroutine("AttackTest");
 

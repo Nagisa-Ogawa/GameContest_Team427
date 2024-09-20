@@ -26,7 +26,6 @@ public class MouseEnemy : EnemyBase
 
         navMeshAgent = GetComponent<NavMeshAgent>();
 
-        SetState(EnemyState.Idle);
 
         //StartCoroutine("AttackTest");
 

@@ -104,11 +104,14 @@ public class PlayerController : MonoBehaviour
     }
 
     private Vector3 moveDirection;// プレイヤーの現在の移動方向
+    private GameManager gm;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+
         idle = new Idle(this);
         move = new Move(this);
         lightAttack = new PossessionLightAttack(this);
@@ -125,6 +128,25 @@ public class PlayerController : MonoBehaviour
 
         playerGage = GameObject.FindObjectOfType<PlayerGage>();
         playerGage.SetPlayer(this);
+
+        if (gm.isMemory)
+        {
+            hp = gm.playerHP;
+            if (gm.possessionEnemyPrefab != null)
+            {
+                Debug.Log("エネミープレハブ引き継げてる");
+                possessionEnemy = Instantiate(gm.possessionEnemyPrefab, transform.position, Quaternion.identity);
+                possessionTargetEnemy = possessionEnemy;
+                possessionEnemy.GetComponent<EnemyBase>().enemyPrefab = gm.possessionEnemyPrefab;
+                //possessionEnemy = go;
+                possessionEnemy.GetComponent<EnemyBase>().hp = gm.enemyHP;
+                possessionEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Possession);
+
+                Change(gm.playerState);
+            }
+            else
+            Debug.Log("エネミープレハブ引き継げてない");
+        }
 
     }
 

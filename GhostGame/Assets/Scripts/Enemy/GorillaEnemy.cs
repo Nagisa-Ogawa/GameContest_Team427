@@ -25,8 +25,6 @@ public class GorillaEnemy : EnemyBase
 
         navMeshAgent = GetComponent<NavMeshAgent>();
 
-        SetState(EnemyState.Idle);
-
         //StartCoroutine("AttackTest");
 
 

@@ -24,7 +24,7 @@ public class SpiderEnemy : EnemyBase
     {
         base.Start();
 
-        SetState(EnemyState.Idle);
+        //SetState(EnemyState.Idle);
 
         //StartCoroutine("AttackTest");
         //Component‚ðŽæ“¾
