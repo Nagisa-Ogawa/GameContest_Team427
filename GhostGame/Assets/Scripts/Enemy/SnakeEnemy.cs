@@ -21,8 +21,6 @@ public class SnakeEnemy : EnemyBase
     {
         base.Start();
 
-        SetState(EnemyState.Idle);
-
         //StartCoroutine("AttackTest");
 
 

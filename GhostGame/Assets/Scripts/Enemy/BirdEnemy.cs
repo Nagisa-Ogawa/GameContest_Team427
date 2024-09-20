@@ -27,7 +27,6 @@ public class BirdEnemy : EnemyBase
     {
         base.Start();
 
-        SetState(EnemyState.Idle);
         isAttack = false;
         attackElapsedTime = 0.0f;
     }
