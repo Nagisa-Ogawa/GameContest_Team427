@@ -22,6 +22,8 @@ public class EnemyBase : MonoBehaviour
     public int maxStanPoint;
     public int stanPoint;
 
+    public GameObject enemyPrefab;
+
     bool isStan;
 
     public int damage;
@@ -76,6 +78,9 @@ public class EnemyBase : MonoBehaviour
     //次のステージに進める状態かどうかなど
     private StageManager sm;
 
+    private GameManager gm;
+
+
     //プレイヤーを追いかける範囲を感知するコライダー
     [SerializeField]
     private SphereSensor sSensor;
@@ -105,41 +110,50 @@ public class EnemyBase : MonoBehaviour
         enemyUIOnOff.SetUIEnemy(this);
 
         sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        if (!gm.isMemory)
+        {
+            SetState(EnemyState.Idle);
+        }
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        if(sSensor.GetIsEnter())
+        if (state != EnemyState.Possession)
         {
-            //プレイヤーが追跡範囲内に入っていたら
-            if (player.gameObject.tag == "Player")
-            {
-                //攻撃状態または硬直状態じゃなければ更新
-                if (state != EnemyBase.EnemyState.Freeze && state != EnemyBase.EnemyState.Attack && state != EnemyBase.EnemyState.Possession)
-                {
-                    //プレイヤーが憑依しているエネミーがいるなら
-                    if (player.GetComponent<PlayerController>().GetPossessionEnemy() != null)
-                    {
-                        //PossessionEnemyのTransformをターゲットに入れる
-                        SetState(EnemyBase.EnemyState.Chase, player.GetComponent<PlayerController>().GetPossessionEnemy().transform);
-                    }
-                    else
-                    {
-                        //いないならPlayerのTransformをターゲットに入れる
-                        SetState(EnemyBase.EnemyState.Chase, player.transform);
-                    }
-                }
 
-                //範囲外に行った際の追跡終了　カウントをリセット
-                sSensor.ResetOutSensorTime();
+
+            if (sSensor.GetIsEnter())
+            {
+                //プレイヤーが追跡範囲内に入っていたら
+                if (player.gameObject.tag == "Player")
+                {
+                    //攻撃状態または硬直状態じゃなければ更新
+                    if (state != EnemyBase.EnemyState.Freeze && state != EnemyBase.EnemyState.Attack && state != EnemyBase.EnemyState.Possession)
+                    {
+                        //プレイヤーが憑依しているエネミーがいるなら
+                        if (player.GetComponent<PlayerController>().GetPossessionEnemy() != null)
+                        {
+                            //PossessionEnemyのTransformをターゲットに入れる
+                            SetState(EnemyBase.EnemyState.Chase, player.GetComponent<PlayerController>().GetPossessionEnemy().transform);
+                        }
+                        else
+                        {
+                            //いないならPlayerのTransformをターゲットに入れる
+                            SetState(EnemyBase.EnemyState.Chase, player.transform);
+                        }
+                    }
+
+                    //範囲外に行った際の追跡終了　カウントをリセット
+                    sSensor.ResetOutSensorTime();
+                }
+            }
+            else
+            {
+                SetState(EnemyState.Idle);
             }
         }
-        else
-        {
-            SetState(EnemyState.Idle);
-        }
-
         //全エネミー共通？
         if(state == EnemyState.Freeze)
         {
@@ -163,6 +177,7 @@ public class EnemyBase : MonoBehaviour
                 enemyStanGage.GageGain();
             }
         }
+
     }
 
     public void TakeDamage(int damage)

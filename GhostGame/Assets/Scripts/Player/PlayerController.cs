@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     bool isStan;
 
     //今憑依しているエネミー
-    private GameObject possessionEnemy = null;
+    public GameObject possessionEnemy = null;
     //憑依対象になっているエネミー
     public GameObject possessionTargetEnemy = null;
 
@@ -94,26 +94,56 @@ public class PlayerController : MonoBehaviour
         private set { playerArmObj = value; }
     }
 
+    private GameManager gm;
 
     // Start is called before the first frame update
     void Start()
     {
-        idle = new Idle(this);
-        move = new Move(this);
-        lightAttack = new LightAttack(this);
-        stanAttack= new StanAttack(this);
+        gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
 
-        possession = new Possession(this);
+        PlayerController p = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+
+        idle = new Idle(p);
+        move = new Move(p);
+        lightAttack = new LightAttack(p);
+        stanAttack= new StanAttack(p);
+
+        possession = new Possession(p);
         playerInput = GetComponent <PlayerInput>();
 
 
         stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
+        
         Change(idle);
 
         hp = maxHp;
 
         playerGage = GameObject.FindObjectOfType<PlayerGage>();
         playerGage.SetPlayer(this);
+
+
+        if (gm.isMemory)
+        {
+            hp = gm.playerHP;
+            if (gm.possessionEnemyPrefab != null)
+            {
+                Debug.Log("エネミープレハブ引き継げてる");
+                possessionEnemy = Instantiate(gm.possessionEnemyPrefab, transform.position, Quaternion.identity);
+                possessionTargetEnemy = possessionEnemy;
+                possessionEnemy.GetComponent<EnemyBase>().enemyPrefab = gm.possessionEnemyPrefab;
+                //possessionEnemy = go;
+                possessionEnemy.GetComponent<EnemyBase>().hp = gm.enemyHP;
+                possessionEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Possession);
+            }
+            else
+                Debug.Log("エネミープレハブ引き継げてない");
+        }
+
+        if (gm.isMemory)
+        {
+            Change(gm.playerState);
+        }
 
     }
 
@@ -200,6 +230,11 @@ public class PlayerController : MonoBehaviour
     public void ResetPossessionEnemy()
     {
         possessionEnemy = null;
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("a");
     }
 
 }

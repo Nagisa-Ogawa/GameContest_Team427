@@ -18,18 +18,29 @@ public class Possession : IState
 
     private StageManager sm;
 
-    public Possession(PlayerController player)
+    public Possession(PlayerController p)
     {
-        this.player = player;
-        rb=player.GetComponent<Rigidbody>();
-        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
+        //this.player = player;
+        //player =  GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        //rb =player.GetComponent<Rigidbody>();
+        //sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
+
+        Debug.Log("player設定している");
 
     }
 
     public void Enter()
     {
+        player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        rb = player.GetComponent<Rigidbody>();
+        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
+
         camera = Camera.main;
         possEnemy = player.GetPossessionEnemy();
+        if(possEnemy == null)
+        {
+            Debug.Log("エネミーがnull");
+        }
         // 剛体のパラメータを変更
         possEnemy.GetComponent<Rigidbody>().drag = 0;
         possEnemy.GetComponent<Rigidbody>().angularDrag = 0.5f;
