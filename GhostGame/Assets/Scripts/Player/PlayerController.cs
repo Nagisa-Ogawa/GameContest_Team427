@@ -138,7 +138,8 @@ public class PlayerController : MonoBehaviour
             if (gm.possessionEnemyPrefab != null)
             {
                 Debug.Log("エネミープレハブ引き継げてる");
-                possessionEnemy = Instantiate(gm.possessionEnemyPrefab, transform.position, Quaternion.identity);
+                Vector3 p = new Vector3(transform.position.x, 0.5f, transform.position.z);
+                possessionEnemy = Instantiate(gm.possessionEnemyPrefab, p, Quaternion.identity);
                 possessionTargetEnemy = possessionEnemy;
                 possessionEnemy.GetComponent<EnemyBase>().enemyPrefab = gm.possessionEnemyPrefab;
                 //possessionEnemy = go;
