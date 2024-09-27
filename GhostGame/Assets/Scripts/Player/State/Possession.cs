@@ -54,7 +54,7 @@ public class Possession : IState
         stanAllowUIManager.DeleteEnemyList(possEnemy);
         player.possessionTargetEnemy = null;
         //憑依したら敵の数カウントを1減らす
-        sm.EnemyPossession();
+        //sm.EnemyPossession();
     }
 
     public void Update()
@@ -140,8 +140,8 @@ public class Possession : IState
             possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
 
             //憑依から解放したら敵の数カウントを1増やす
-            sm.EnemyPossessionCancel();
-            Debug.Log("possessioncancel");
+            //sm.EnemyPossessionCancel();
+            //Debug.Log("possessioncancel");
         }
     }
 

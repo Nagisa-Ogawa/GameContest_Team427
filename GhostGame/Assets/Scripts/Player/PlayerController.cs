@@ -106,11 +106,14 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection;// ƒvƒŒƒCƒ„[‚ÌŒ»İ‚ÌˆÚ“®•ûŒü
     private GameManager gm;
 
+    private StageManager sm;
+
 
     // Start is called before the first frame update
     void Start()
     {
         gm = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
 
         idle = new Idle(this);
         move = new Move(this);
@@ -194,6 +197,7 @@ public class PlayerController : MonoBehaviour
                 possessionEnemy.GetComponent<EnemyBase>().StopWorkingCoroutine();
                 GetComponent<CapsuleCollider>().isTrigger = true;
                 Change(possession);
+                sm.EnemyPossession();
             }
         }
     }
@@ -238,6 +242,7 @@ public class PlayerController : MonoBehaviour
     public void ResetPossessionEnemy()
     {
         possessionEnemy = null;
+        sm.EnemyPossessionCancel();
     }
 
 }

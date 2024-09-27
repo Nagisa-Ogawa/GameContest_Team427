@@ -42,7 +42,7 @@ public class StageManager : MonoBehaviour
     {
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
-        waveNum = 2;
+        waveNum = 0;
 
         for (int i = 0; i < waveList[waveNum].waveEnemy.Length; i++)
         {
