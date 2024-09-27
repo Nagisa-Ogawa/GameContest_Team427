@@ -11,6 +11,8 @@ TagManager:
   - MeshColor
   - StageManager
   - SlashEffect
+  - GameManager
+  - BuffUI
   layers:
   - Default
   - TransparentFX

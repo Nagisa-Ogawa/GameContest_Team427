@@ -10,8 +10,6 @@ public class PossessionLightAttack : IState
     private PlayerController player;
     private Rigidbody rb;
     GameObject target = null;
-    int lightAttackDamage = 5;      // 弱攻撃のダメージ数
-    float lightAttackCD = 2.0f;     // 弱攻撃のクールダウン
     float lightAttackRadius = 4.0f; // 弱攻撃の敵を捕捉する球体の半径
     float lightAttackOffset = 3.0f; // 接近して弱攻撃する際の敵との距離オフセット
     float moveSpeed = 5.0f; // 敵に接近する際の速度
@@ -29,7 +27,7 @@ public class PossessionLightAttack : IState
         this.player = player;
         rb=player.GetComponent<Rigidbody>();
         //リキャストリセット
-        lastAttackTime = Time.time - lightAttackCD;
+        lastAttackTime = Time.time - player.NowLightAttackCD;
     }
 
     public void Enter()
@@ -65,7 +63,7 @@ public class PossessionLightAttack : IState
 
         }
         // クルーダウンが解消しているかチェック
-        if (deltaTime <= lightAttackCD)
+        if (deltaTime <= player.NowLightAttackCD)
         {
             // いないなら攻撃をやめる
             player.Change(player.possession);
@@ -151,7 +149,7 @@ public class PossessionLightAttack : IState
         ParticleSystem hitEffect=hitEffectObj.GetComponent<ParticleSystem>();
         hitEffect.Play();
         // ダメージを与える
-        target.GetComponentInParent<EnemyBase>().TakeDamage(lightAttackDamage);
+        target.GetComponentInParent<EnemyBase>().TakeDamage(player.LightAttackDamage);
         // 現在時刻を取得
         lastAttackTime = Time.time;
         // コンボ数を更新

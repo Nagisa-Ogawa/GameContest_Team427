@@ -19,14 +19,11 @@ public class Possession : IState
 
     private StageManager sm;
 
+    // バフ関係
+    float possTime = 0.0f;
+
     public Possession(PlayerController p)
     {
-        //this.player = player;
-        //player =  GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        //rb =player.GetComponent<Rigidbody>();
-        //sm = GameObject.FindWithTag("StageManager").GetComponent<StageManager>();
-
-        Debug.Log("player設定している");
 
     }
 
@@ -47,14 +44,53 @@ public class Possession : IState
         possEnemy.GetComponent<Rigidbody>().angularDrag = 0.5f;
         // 憑依した敵の色を戻す
         // 色を戻す
-        //GameObject model = possEnemy.transform.Find("Mouse/default").gameObject;
-        Material mat = possEnemy.transform.GetComponentInChildren<MeshRenderer>().material;
-        mat.color = possEnemy.GetComponent<EnemyBase>().NormalColor;
+        MeshRenderer[] meshs = possEnemy.transform.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mesh in meshs)
+        {
+            if (mesh.gameObject.tag != "MeshColor")
+            {
+                continue;
+            }
+            Material mat = mesh.material;
+            mat.color = possEnemy.GetComponent<EnemyBase>().NormalColor;
+        }
         StanAllowUIManager stanAllowUIManager = GameObject.FindWithTag("StanAllowUIManager").GetComponent<StanAllowUIManager>();
         stanAllowUIManager.DeleteEnemyList(possEnemy);
         player.possessionTargetEnemy = null;
-        //憑依したら敵の数カウントを1減らす
-        //sm.EnemyPossession();
+
+        // 前回と同じ敵でないならバフを獲得
+        if (player.BeforeEnemy == null || player.BeforeEnemy != possEnemy) 
+        {
+            player.NowBuffStack++;
+            // 最大数チェック
+            if (player.NowBuffStack > player.MaxBuffStack)
+            {
+                player.NowBuffStack = player.MaxBuffStack;
+            }
+            // 攻撃速度を変更
+            switch (player.NowBuffStack)
+            {
+                case 0:
+                    break;
+                case 1:
+                    player.NowLightAttackCD = player.LightAttackCD * 0.9f;
+                    break;
+                case 2:
+                    player.NowLightAttackCD = player.LightAttackCD * 0.8f;
+                    break;
+                case 3:
+                    player.NowLightAttackCD = player.LightAttackCD * 0.8f;
+                    player.LightAttackDamage = (int)(player.LightAttackDamage * 1.5f);
+                    break;
+            }
+            // バフの時間をリセット
+            possTime = Time.time;
+            player.BeforeEnemy = possEnemy;
+        }
+        else
+        {
+
+        }
     }
 
     public void Update()
@@ -124,6 +160,15 @@ public class Possession : IState
             possEnemy.GetComponent<EnemyBase>().PossessionStanAttack();
         }
 
+        // バフが終わったかチェック
+        float deltaTime = Time.time - possTime;
+        if(deltaTime>player.BuffTime)
+        {
+            player.NowBuffStack = 0;
+            // 攻撃速度と攻撃力を戻す
+            player.NowLightAttackCD = player.LightAttackCD;
+            player.LightAttackDamage = 5;
+        }
     }
 
     public void Exit()
@@ -138,6 +183,7 @@ public class Possession : IState
             possEnemy.GetComponent<Rigidbody>().angularDrag = 100;
             // 憑依から解放する
             possEnemy.GetComponent<EnemyBase>().SetState(EnemyBase.EnemyState.Idle);
+
 
             //憑依から解放したら敵の数カウントを1増やす
             //sm.EnemyPossessionCancel();

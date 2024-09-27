@@ -19,6 +19,11 @@ public class Idle :IState
 
     public void Enter()
     {
+        // ƒoƒt‚ğ‰ğœ
+        player.NowBuffStack = 0;
+        // UŒ‚‘¬“x‚ÆUŒ‚—Í‚ğ–ß‚·
+        player.NowLightAttackCD = player.LightAttackCD;
+        player.LightAttackDamage = 5;
     }
 
     public void Update()
@@ -28,11 +33,6 @@ public class Idle :IState
         {
             player.Change(player.move);
         }
-        //isLightAttack = player.PlayerInput.currentActionMap["LightAttack"].WasPressedThisFrame();
-        //if (isLightAttack)
-        //{
-        //    player.Change(player.lightAttack);
-        //}
         isStanAttack = player.PlayerInput.currentActionMap["StanAttack"].WasPressedThisFrame();
         if (isStanAttack)
         {

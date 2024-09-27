@@ -108,6 +108,61 @@ public class PlayerController : MonoBehaviour
 
     private StageManager sm;
 
+    [SerializeField]
+    private float buffTime = 15.0f;      // プレイヤーのバフ
+    public float BuffTime
+    {
+        get { return buffTime; }
+        private set { buffTime = value; }
+    }
+
+
+    [SerializeField]
+    private int maxBuffStack = 3; // プレイヤーのバフの最大スタック
+    public int MaxBuffStack
+    {
+        get { return maxBuffStack; }
+        private set { maxBuffStack = value; }
+    }
+
+    [SerializeField]
+    private int nowBuffStack;   // プレイヤーの現在のバフのスタック
+    public int NowBuffStack
+    {
+        get { return nowBuffStack; }
+        set {  nowBuffStack = value; }
+    }
+
+    private GameObject beforeEnemy;     // 前回とりついた敵
+    public GameObject BeforeEnemy
+    {
+        get { return beforeEnemy; }
+        set { beforeEnemy = value; }
+    }
+
+    [SerializeField]
+    private float lightAttackCD = 2.0f;     // 弱攻撃のクールダウン
+    public float LightAttackCD
+    {
+        get { return lightAttackCD; }
+        private set { lightAttackCD = value; }
+    }
+
+    [SerializeField]
+    private float nowLightAttackCD = 0.0f;
+    public float NowLightAttackCD
+    {
+        get { return nowLightAttackCD; }
+        set { nowLightAttackCD = value; }
+    }
+
+    int lightAttackDamage = 5;      // 弱攻撃のダメージ数
+    public int LightAttackDamage
+    {
+        get { return lightAttackDamage; }
+        set {  lightAttackDamage = value; }
+    }
+
 
     // Start is called before the first frame update
     void Start()
