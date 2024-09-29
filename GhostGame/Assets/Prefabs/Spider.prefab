@@ -121,6 +121,7 @@ MonoBehaviour:
   hp: 0
   maxStanPoint: 10
   stanPoint: 0
+  enemyPrefab: {fileID: 0}
   damage: 0
   stanDamage: 0
   moveSpeed: 1.8
@@ -131,11 +132,14 @@ MonoBehaviour:
   possessionPlayerDistance: 1.5
   sSensor: {fileID: 771531526950919244}
   damageUI: {fileID: 7655956814956858437, guid: 9bbabb283ab8e19458b1fcf3517e0853, type: 3}
+  damageSE: {fileID: 8300000, guid: 90a81c8a718581f46ba50ce01793fa87, type: 3}
   attackCollider: {fileID: 3949722044833592965}
   stanAttackCollider: {fileID: 0}
   attackRange: 3
   bullet: {fileID: 7097041790318249819, guid: dae94f2657240a448936c2b142a7a8a7, type: 3}
-  sound1: {fileID: 8300000, guid: 6f76ded3d3c6b094cbe3d2e6649b2f7a, type: 3}
+  AttackSE: {fileID: 8300000, guid: 90a81c8a718581f46ba50ce01793fa87, type: 3}
+  heavyAttackSE: {fileID: 8300000, guid: 433060b558fb5a640af76e6f99ed5c66, type: 3}
+  stanAttackSE: {fileID: 8300000, guid: 6f76ded3d3c6b094cbe3d2e6649b2f7a, type: 3}
 --- !u!54 &3585916976872860951
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -172,7 +176,7 @@ AudioSource:
   m_GameObject: {fileID: 1625611231425773880}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 4499957233284510260, guid: c03f1b48b5861ba43acfddd97edf1263, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1

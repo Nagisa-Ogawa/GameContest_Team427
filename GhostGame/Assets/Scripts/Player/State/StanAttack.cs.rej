@@ -1,0 +1,13 @@
+diff a/GhostGame/Assets/Scripts/Player/State/StanAttack.cs b/GhostGame/Assets/Scripts/Player/State/StanAttack.cs	(rejected hunks)
+@@ -99,7 +99,10 @@
+         areaObj.GetComponent<SphereCollider>().enabled = false;
+         areaModelObj.SetActive(false);
+         // ���ݎ�����擾
+-        lastAttackTime = Time.time;
++        //lastAttackTime = Time.time;
++
++        // 1�b�ҋ@(�㌄)
++        yield return new WaitForSeconds(1.0f);
+         // �U����I��
+         player.Change(player.idle);
+     }

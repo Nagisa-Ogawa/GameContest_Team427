@@ -22,6 +22,9 @@ public class StageDoor : MonoBehaviour
     //ドアが開く際にこのポジションまで開く
     Vector3 goalPosition;
 
+    AudioSource audioSource;
+    public AudioClip openSE;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +32,8 @@ public class StageDoor : MonoBehaviour
         playerInput = GameObject.FindWithTag("Player").GetComponent<PlayerInput>();
 
         goalPosition = new Vector3(transform.position.x + 3.0f, transform.position.y, transform.position.z);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -42,6 +47,9 @@ public class StageDoor : MonoBehaviour
             //RightDoor.transform.rotation = Quaternion.Slerp(RightDoor.transform.rotation, transform.rotation *  Quaternion.AngleAxis(90, Vector3.up), Time.deltaTime);
 
             transform.position = Vector3.Lerp(transform.position, goalPosition, 0.05f);
+
+            //音を鳴らす
+            audioSource.PlayOneShot(openSE);
         }
 
         if (nsc.GetIsEnter() && sm.GetIsOpen())

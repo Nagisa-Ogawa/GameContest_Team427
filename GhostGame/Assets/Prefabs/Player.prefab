@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1ce3f036a19f714997fc1f5ca6e3d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 999
+  maxHp: 50
   hp: 0
   maxStanPoint: 16
   possessionEnemy: {fileID: 0}
@@ -143,6 +143,11 @@ MonoBehaviour:
   stanHitEffectObj: {fileID: 5081134170703874692, guid: cc35d024673beb1409095dae4fcc469e, type: 3}
   slashEffectObj: {fileID: 4210485791932858974, guid: ba02f6a8eb6671d4eb9ddd2ab25dde79, type: 3}
   playerArmObj: {fileID: 4418434934547899638}
+  buffTime: 15
+  maxBuffStack: 3
+  nowBuffStack: 0
+  lightAttackCD: 2
+  nowLightAttackCD: 0
 --- !u!1 &1320576841380536113
 GameObject:
   m_ObjectHideFlags: 0

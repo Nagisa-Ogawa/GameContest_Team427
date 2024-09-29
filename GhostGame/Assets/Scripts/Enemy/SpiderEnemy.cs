@@ -16,8 +16,10 @@ public class SpiderEnemy : EnemyBase
     float attackRange = 0.8f;
     [SerializeField]
     GameObject bullet;
-    public AudioClip sound1;
-    AudioSource audioSource;
+    public AudioClip AttackSE;
+    public AudioClip heavyAttackSE;
+    public AudioClip stanAttackSE;
+    AudioSource spiderAudioSource;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -28,7 +30,7 @@ public class SpiderEnemy : EnemyBase
 
         //StartCoroutine("AttackTest");
         //Component‚ðŽæ“¾
-        audioSource = GetComponent<AudioSource>();
+        spiderAudioSource = GetComponent<AudioSource>();
 
     }
 
@@ -124,6 +126,9 @@ public class SpiderEnemy : EnemyBase
 
         PlayAttackEffect(attackCollider.gameObject);
 
+        //‰¹‚ð–Â‚ç‚·
+        spiderAudioSource.PlayOneShot(AttackSE);
+
         yield return new WaitForSeconds(1.2f);
 
         DisableAttackCollider();
@@ -138,6 +143,8 @@ public class SpiderEnemy : EnemyBase
     private IEnumerator PossessionAttackCoroutine()
     {
         yield return new WaitForSeconds(0.6f);
+
+        spiderAudioSource.PlayOneShot(heavyAttackSE);
 
         EnableAttackCollider();
 
@@ -157,8 +164,8 @@ public class SpiderEnemy : EnemyBase
     private IEnumerator PossessionStanAttackCoroutine()
     {
         
-        //‰¹(sound1)‚ð–Â‚ç‚·
-        audioSource.PlayOneShot(sound1);
+        //‰¹‚ð–Â‚ç‚·
+        spiderAudioSource.PlayOneShot(stanAttackSE);
         yield return new WaitForSeconds(0.5f);
         Vector3 pos = transform.position + transform.forward * 2.0f;
         GameObject go;

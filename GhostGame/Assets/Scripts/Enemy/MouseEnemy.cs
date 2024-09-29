@@ -18,6 +18,11 @@ public class MouseEnemy : EnemyBase
     [SerializeField]
     float attackRange = 3.0f;
 
+    public AudioClip AttackSE;
+    public AudioClip heavyAttackSE;
+    public AudioClip stanAttackSE;
+    AudioSource mouseAudioSource;
+
 
     // Start is called before the first frame update
     protected override void Start()
@@ -29,6 +34,7 @@ public class MouseEnemy : EnemyBase
 
         //StartCoroutine("AttackTest");
 
+        mouseAudioSource = GetComponent<AudioSource>();
 
     }
 
@@ -123,6 +129,9 @@ public class MouseEnemy : EnemyBase
 
         EnableAttackCollider();
 
+        //‰¹‚ð–Â‚ç‚·
+        mouseAudioSource.PlayOneShot(AttackSE);
+
         PlayAttackEffect(attackCollider.gameObject);
 
         yield return new WaitForSeconds(0.2f);
@@ -138,6 +147,8 @@ public class MouseEnemy : EnemyBase
     private IEnumerator PossessionAttackCoroutine()
     {
         yield return new WaitForSeconds(0.6f);
+
+        mouseAudioSource.PlayOneShot(heavyAttackSE);
 
         EnableAttackCollider();
 
@@ -158,6 +169,8 @@ public class MouseEnemy : EnemyBase
 
         EnableStanAttackCollider();
 
+        //‰¹‚ð–Â‚ç‚·
+        mouseAudioSource.PlayOneShot(stanAttackSE);
         PlayAttackEffect(stanAttackCollider.gameObject);
 
         yield return new WaitForSeconds(0.2f);

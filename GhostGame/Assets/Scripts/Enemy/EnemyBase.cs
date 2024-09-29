@@ -86,6 +86,12 @@ public class EnemyBase : MonoBehaviour
     private SphereSensor sSensor;
 
     public GameObject damageUI;
+
+    AudioSource audioSource;
+    public AudioClip damageSE;
+
+
+
     protected virtual void Awake()
     {
         hp = maxHp;
@@ -115,6 +121,9 @@ public class EnemyBase : MonoBehaviour
         {
             SetState(EnemyState.Idle);
         }
+
+        audioSource = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -195,6 +204,9 @@ public class EnemyBase : MonoBehaviour
         damagetext.GetComponent<DamageUI>().Init();
         damagetext.GetComponent<DamageUI>().TextChange(damage.ToString());
 
+        audioSource.PlayOneShot(damageSE);
+
+
         if (hp <= 0)
         {
             gameObject.SetActive(false);
@@ -207,7 +219,10 @@ public class EnemyBase : MonoBehaviour
         enemyStanGage.GageReduction(stanDamage);
 
         stanPoint -= stanDamage;
-        if(stanPoint <= 0)
+
+        audioSource.PlayOneShot(damageSE);
+
+        if (stanPoint <= 0)
         {
             // ƒXƒ^ƒ“ó‘Ô‚Ö
             state = EnemyState.Freeze;
