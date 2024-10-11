@@ -37,9 +37,12 @@ public class StageManager : MonoBehaviour
     [SerializeField]
     private SpawnWave[] waveList;
 
+    public AudioClip sound1;
+    AudioSource audioSource;
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         player = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
 
         waveNum = 0;
@@ -83,6 +86,7 @@ public class StageManager : MonoBehaviour
             if (waveNum == waveList.Length - 1)
             {
                 isOpen = true;
+                audioSource.PlayOneShot(sound1);
             }
             else
             {
